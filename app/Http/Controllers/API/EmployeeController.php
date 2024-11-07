@@ -25,7 +25,6 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'user_id' => 'required',
             'first_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
             'last_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
             'email' => 'required|email:rfc,dns|unique:employees,email',
@@ -41,11 +40,11 @@ class EmployeeController extends Controller
         }
 
         try {
-            if (!$user = User::find($request->user_id)) {
-                return $this->errorResponse(Status::NOT_FOUND, 'invalid user ID');
-            };
+            if (!$user = User::find(auth()->id())) {
+                throw new Exception('there is an internal error');
+            }
 
-            if (!$user->employee()->create($request->except('user_id'))) {
+            if (!$user->employee()->create($request->all())) {
                 throw new Exception('failed to created new employee resource');
             }
 
@@ -72,7 +71,6 @@ class EmployeeController extends Controller
     public function update(Request $request, string $employeeId)
     {
         $validation = Validator::make($request->all(), [
-            'user_id' => 'sometimes|required',
             'first_name' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
             'last_name' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
             'email' => 'sometimes|required|email:rfc,dns|unique:employees,email,' . $employeeId . ',id',
@@ -88,10 +86,6 @@ class EmployeeController extends Controller
         }
 
         try {
-            if (!User::find($request->user_id)) {
-                return $this->errorResponse(Status::NOT_FOUND, 'invalid user ID');
-            };
-
             if (!$employee = Employee::find($employeeId)) {
                 return $this->errorResponse(Status::NOT_FOUND, 'invalid employee ID');
             };
@@ -110,7 +104,7 @@ class EmployeeController extends Controller
     {
         try {
             if (!$employee = Employee::find($employeeId)) {
-                return $this->successResponse(Status::NOT_FOUND, 'invalid employee ID');
+                return $this->errorResponse(Status::NOT_FOUND, 'invalid employee ID');
             };
 
             if (!$employee->delete()) {
