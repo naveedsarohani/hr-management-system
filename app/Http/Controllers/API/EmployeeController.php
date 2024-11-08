@@ -45,7 +45,7 @@ class EmployeeController extends Controller
             }
 
             if (!$user->employee()->create($request->all())) {
-                throw new Exception('failed to created new employee resource');
+                throw new Exception('failed to create new employee resource');
             }
 
             return $this->successResponse(Status::SUCCESS, 'a new employe resource was created');
@@ -94,7 +94,7 @@ class EmployeeController extends Controller
                 throw new Exception('failed to update employee resource');
             }
 
-            return $this->successResponse(Status::SUCCESS, 'the employee data wa updated');
+            return $this->successResponse(Status::SUCCESS, 'the employee data was updated');
         } catch (Exception $e) {
             return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
         }
