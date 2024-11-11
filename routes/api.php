@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 /*Routes Maintained BY Wajid Laghari*/
 
-/*employee routes maintained by Wajid*/
+#Authentication
 Route::group(['prefix' => 'auth'], function () {
     Route::controller(AuthController::class)->group(function(){
         Route::post('/login', 'login');
@@ -18,6 +18,7 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+#Admin
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'is_admin']], function () {
     Route::controller(AuthController::class)->group(function(){
         Route::post('/admin-hr-register', 'register');
@@ -25,12 +26,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'is_admin']]
         Route::delete('/delete-hr/{id}', 'deleteHR');
         Route::put('/update-hr/{id}', 'updateHR');
         Route::get('/show-hr/{id}', 'showHR');
-        Route::post('/approve-user/{id}', 'updateUserStatus');
-    });
-});
-
-Route::group(['prefix' => 'hr', 'middleware' => ['auth:sanctum', 'is_admin_or_hr']], function () {
-    Route::controller(AuthController::class)->group(function(){
         Route::post('/approve-user/{id}', 'updateUserStatus');
     });
 });
