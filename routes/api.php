@@ -1,33 +1,46 @@
 <?php
 
 use App\Http\Controllers\API\EmployeeController;
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ApI\AuthController;
 use App\Http\Controllers\API\JobController;
-use App\Http\Controllers\Api\PerformanceReviewController;
-use App\Http\Controllers\Api\CompensationController;
+use App\Http\Controllers\ApI\PerformanceReviewController;
+use App\Http\Controllers\API\CompensationController;
 use Illuminate\Support\Facades\Route;
 
 /*Routes Maintained BY Wajid Laghari*/
+
+/*employee routes maintained by Wajid*/
 Route::group(['prefix' => 'auth'], function () {
-    Route::controller(AuthController::class)->group(function () {
+    Route::controller(AuthController::class)->group(function(){
         Route::post('/login', 'login');
-        Route::post('/hr-register', 'hrSelfRegister');
+        Route::post('/hr-self-register', 'register');
+        Route::get('/logout', 'logout')->middleware('auth:sanctum');;
+    });
+});
 
-        Route::middleware('auth:sanctum')->group(function () {
-            Route::get('/logout', 'logout');
+Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'is_admin']], function () {
+    Route::controller(AuthController::class)->group(function(){
+        Route::post('/admin-hr-register', 'register');
+        Route::get('/hrs', 'showAllHRS');
+        Route::delete('/delete-hr/{id}', 'deleteHR');
+        Route::put('/update-hr/{id}', 'updateHR');
+        Route::get('/show-hr/{id}', 'showHR');
+        Route::post('/approve-user/{id}', 'updateUserStatus');
+    });
+});
 
-            Route::middleware('is_admin_or_hr')->group(function () {
-                Route::post('/register', 'register');
-                Route::post('/approve-user/{id}', 'approveUser');
-            });
-        });
+Route::group(['prefix' => 'hr', 'middleware' => ['auth:sanctum', 'is_admin_or_hr']], function () {
+    Route::controller(AuthController::class)->group(function(){
+        Route::post('/approve-user/{id}', 'updateUserStatus');
     });
 });
 
 Route::apiResource('performance-reviews', PerformanceReviewController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
-// Route::apiResource('compensations', CompensationController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
+Route::apiResource('compensations', CompensationController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
+
 
 // ROUTES MAINTAINED BY NAVEED
+
 # employees
 Route::apiResource('employees', EmployeeController::class)->middleware('auth:sanctum');
 
