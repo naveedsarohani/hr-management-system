@@ -26,7 +26,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'is_admin']]
         Route::delete('/delete-hr/{id}', 'deleteHR');
         Route::put('/update-hr/{id}', 'updateHR');
         Route::get('/show-hr/{id}', 'showHR');
-        Route::post('/approve-user/{id}', 'updateUserStatus');
+        Route::post('/update-status-hr/{id}', 'updateUserStatus');
     });
 });
 

@@ -155,7 +155,7 @@
 					"response": []
 				},
 				{
-					"name": "Admin-Update-User-Status",
+					"name": "Admin-Update-HR-Status",
 					"request": {
 						"auth": {
 							"type": "bearer",
