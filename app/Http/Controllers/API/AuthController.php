@@ -141,14 +141,13 @@ class AuthController extends Controller
             'name' => 'sometimes|required',
             'email' => 'sometimes|required|email|unique:users,email,' . $id,
             'password' => 'sometimes|required',
-            'role' => 'sometimes|required|in:employee,hr',
         ]);
 
         if ($request->input('password')) {
             $user->password = Hash::make($request->input('password'));
         }
 
-        $user->update($request->only(['name', 'email', 'role']));
+        $user->update($request->all());
 
         return response()->json(['message' => 'HR updated successfully!'], Status::SUCCESS);
     }

@@ -30,7 +30,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'is_admin']]
     });
 });
 
+#PerformanceReviews
 Route::apiResource('performance-reviews', PerformanceReviewController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
+
+#Compensations
 Route::apiResource('compensations', CompensationController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
 
 
