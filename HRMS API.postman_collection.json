@@ -186,13 +186,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{host}}/admin/approve-user/7",
+							"raw": "{{host}}/admin/update-status-hr/7",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"admin",
-								"approve-user",
+								"update-status-hr",
 								"7"
 							]
 						}
