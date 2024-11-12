@@ -143,13 +143,20 @@ class AuthController extends Controller
             'password' => 'sometimes|required',
         ]);
 
+        /*Prevent changing role from hr*/
+        $request->request->remove('role');
+
         if ($request->input('password')) {
             $user->password = Hash::make($request->input('password'));
         }
 
         $user->update($request->all());
 
-        return response()->json(['message' => 'HR updated successfully!'], Status::SUCCESS);
+        /*Ensure role remains hr*/
+        $user->role = 'hr';
+        $user->save();
+
+            return response()->json(['message' => 'HR updated successfully!'], Status::SUCCESS);
     }
 
     public function deleteHR($id)
