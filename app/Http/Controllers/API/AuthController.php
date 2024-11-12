@@ -28,7 +28,7 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'role' => 'hr',
-            'status' => 'approved'
+            'status' => 'pending'
         ]);
 
         return response()->json(['message' => auth()->check() ? 'Hr Created Successfully!' : 'You Are Registered Successfully!'], Status::SUCCESS);
