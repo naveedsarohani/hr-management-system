@@ -64,9 +64,9 @@ class JobController extends Controller
         }
 
         try {
-            $filteredJobs = Job::where('title', 'like', "%{$q}%")->orWhere('description', 'like', "%{$q}%")->orWhere('status', 'like', "%{$q}%")->get();
+            $filterredJobs = Job::where('title', 'like', "%{$q}%")->orWhere('description', 'like', "%{$q}%")->orWhere('status', 'like', "%{$q}%")->get();
 
-            return $this->successResponse(Status::SUCCESS, 'matched job advertisements against query', compact('filteredJobs'));
+            return $this->successResponse(Status::SUCCESS, 'matched job advertisements against query', compact('filterredJobs'));
         } catch (Exception $e) {
             return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
         }

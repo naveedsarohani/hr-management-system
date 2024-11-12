@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ApplicationController;
 use App\Http\Controllers\API\EmployeeController;
 use App\Http\Controllers\ApI\AuthController;
 use App\Http\Controllers\API\JobController;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 #Authentication
 Route::group(['prefix' => 'auth'], function () {
-    Route::controller(AuthController::class)->group(function(){
+    Route::controller(AuthController::class)->group(function () {
         Route::post('/login', 'login');
         Route::post('/hr-self-register', 'register');
         Route::get('/logout', 'logout')->middleware('auth:sanctum');;
@@ -20,7 +21,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 #Admin
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'is_admin']], function () {
-    Route::controller(AuthController::class)->group(function(){
+    Route::controller(AuthController::class)->group(function () {
         Route::post('/admin-hr-register', 'register');
         Route::get('/hrs', 'showAllHRS');
         Route::delete('/delete-hr/{id}', 'deleteHR');
@@ -35,7 +36,6 @@ Route::apiResource('compensations', CompensationController::class)->middleware([
 
 
 // ROUTES MAINTAINED BY NAVEED
-
 # employees
 Route::apiResource('employees', EmployeeController::class)->middleware('auth:sanctum');
 
@@ -50,4 +50,13 @@ Route::controller(JobController::class)->prefix('jobs')->group(function () {
         Route::put('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
     });
+});
+
+# applications
+Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->get('applications/filter', [ApplicationController::class, 'filter']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('applications/get/search', [ApplicationController::class, 'search']);
+    Route::apiResource('applications', ApplicationController::class);
 });

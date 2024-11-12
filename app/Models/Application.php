@@ -5,18 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Job extends Model
+class Application extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
-        'status'
+        'candidate_name',
+        'email',
+        'status',
+        'resume',
     ];
 
-    public function application()
+    public function job()
     {
-        return $this->hasOne(Application::class, 'job_id', 'id');
+        return $this->belongsTo(Job::class, 'job_id', 'id');
     }
 }
