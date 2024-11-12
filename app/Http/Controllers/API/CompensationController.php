@@ -79,14 +79,13 @@ class CompensationController extends Controller
     }
     /**
      * Remove the specified resource from storage.
-     */
+    */
     public function destroy(string $id)
     {
-
         $compensation = Compensation::find($id);
 
         if (!$compensation) {
-            return response()->json(['message' => 'Compensation not found'], 404);
+            return response()->json(['message' => 'Compensation not found'], Status::NOT_FOUND);
         }
 
         $compensation->delete();
