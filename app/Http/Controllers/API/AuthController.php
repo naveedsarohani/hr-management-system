@@ -141,16 +141,22 @@ class AuthController extends Controller
             'name' => 'sometimes|required',
             'email' => 'sometimes|required|email|unique:users,email,' . $id,
             'password' => 'sometimes|required',
-            'role' => 'sometimes|required|in:employee,hr',
         ]);
+
+        /*Prevent changing role from hr*/
+        $request->request->remove('role');
 
         if ($request->input('password')) {
             $user->password = Hash::make($request->input('password'));
         }
 
-        $user->update($request->only(['name', 'email', 'role']));
+        $user->update($request->all());
 
-        return response()->json(['message' => 'HR updated successfully!'], Status::SUCCESS);
+        /*Ensure role remains hr*/
+        $user->role = 'hr';
+        $user->save();
+
+            return response()->json(['message' => 'HR updated successfully!'], Status::SUCCESS);
     }
 
     public function deleteHR($id)
