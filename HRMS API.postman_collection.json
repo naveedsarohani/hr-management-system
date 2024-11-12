@@ -1,0 +1,1513 @@
+{
+	"info": {
+		"_postman_id": "1d0c88e6-ac0d-4258-b216-03091177614e",
+		"name": "HRMS API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39251898"
+	},
+	"item": [
+		{
+			"name": "User-endpoints",
+			"item": [
+				{
+					"name": "HR Register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hr2",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "hrr2676@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/admin/hr-register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"admin",
+								"hr-register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin-HR-Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "admin@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin-HR-Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/auth/logout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin-Update-HR-Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "status",
+									"value": "approved",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/admin/approve-user/7",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"admin",
+								"approve-user",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HR-Self-Registration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "naveed",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "naveedsdfhr@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth/hr-self-register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"hr-self-register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show-All-HRS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{host}}/admin/hrs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"admin",
+								"hrs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-HR",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/admin/delete-hr/15",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"admin",
+								"delete-hr",
+								"15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-HR",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "update",
+									"type": "text"
+								},
+								{
+									"key": "_method",
+									"value": "put",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "updatehrupdate@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "hr",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/admin/update-hr/18",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"admin",
+								"update-hr",
+								"18"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specific-HR",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/admin/show-hr/18",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"admin",
+								"show-hr",
+								"18"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employee-endpoints",
+			"item": [
+				{
+					"name": "All-records",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/employees/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employees",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specified-record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/employees/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employees",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create-record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "naveed",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "sarohani",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "naveed.sarohani@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "3163622690",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "larkana city sindh pakistan",
+									"type": "text"
+								},
+								{
+									"key": "department",
+									"value": "web development",
+									"type": "text"
+								},
+								{
+									"key": "position",
+									"value": "backend developer",
+									"type": "text"
+								},
+								{
+									"key": "date_of_joining",
+									"value": "2022-01-01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/employees",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "put",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "naveed",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "chandio",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "naveed.sarohani2@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "3163622690",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "larkana city sindh pakistan",
+									"type": "text"
+								},
+								{
+									"key": "department",
+									"value": "web development",
+									"type": "text"
+								},
+								{
+									"key": "position",
+									"value": "backend developer",
+									"type": "text"
+								},
+								{
+									"key": "date_of_joining",
+									"value": "2022-01-01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/employees/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employees",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "delete",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/employees/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employees",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Performance-review-endpoints",
+			"item": [
+				{
+					"name": "Create - Record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "29|Di9qNXme6PpeurEDe6yCAznOukZmuqh269Nz3zHH21452dba",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "employee_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "review_date",
+									"value": "2024-08-11",
+									"type": "text"
+								},
+								{
+									"key": "kpi_score",
+									"value": "50.6",
+									"type": "text"
+								},
+								{
+									"key": "feedback",
+									"value": "This is the first feedback for employee 1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/performance-reviews",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"performance-reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specified - Record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/performance-reviews/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"performance-reviews",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All - Records",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/performance-reviews",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"performance-reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update - Record",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "put",
+									"type": "text"
+								},
+								{
+									"key": "employee_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "review_date",
+									"value": "2024-11-11",
+									"type": "text"
+								},
+								{
+									"key": "kpi_store",
+									"value": "50",
+									"type": "text"
+								},
+								{
+									"key": "feedbacks",
+									"value": "update feedback",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/performance-reviews/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"performance-reviews",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete -Record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "29|Di9qNXme6PpeurEDe6yCAznOukZmuqh269Nz3zHH21452dba",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/performance-reviews/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"performance-reviews",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job-endpoints",
+			"item": [
+				{
+					"name": "All-records",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/jobs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specified-record",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/jobs/get/11",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								"get",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search-records",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/jobs/search?q=icreativez",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "icreativez"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create-record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "php laravel developer",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "this is open position at icreativez requires minimum 5 years of experience",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "closed",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/jobs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "put",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "this is an updated title for laravel developer open position",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "open",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/jobs/11",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "delete",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/jobs/12",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"jobs",
+								"12"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Compensation-endpoints",
+			"item": [
+				{
+					"name": "Create-Record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "employee_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "base_salary",
+									"value": "5000",
+									"type": "text"
+								},
+								{
+									"key": "bonus",
+									"value": "5000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/compensations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"compensations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All - Records",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/compensations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"compensations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specified - Record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/compensations/35",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"compensations",
+								"35"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update -Record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "_method",
+									"value": "put",
+									"type": "text"
+								},
+								{
+									"key": "base_salary",
+									"value": "5000",
+									"type": "text"
+								},
+								{
+									"key": "bonus",
+									"value": "1000",
+									"type": "text"
+								},
+								{
+									"key": "employee",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/compensations/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"compensations",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete - Record",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/compensations/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"compensations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

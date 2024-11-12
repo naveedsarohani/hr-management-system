@@ -12,18 +12,16 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        if (auth()->check()) {
-
-            if (auth()->user()->role === 'admin') {
-                $request->validate([
-                    'name' => 'required',
-                    'email' => 'required|email|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-                    'password' => 'required',
-                ]);
-            } else {
-                return response()->json(['message' => 'Unauthorized'], Status::UNAUTHORIZED);
-            }
+        if(auth()->check() && auth()->user()->role !== 'admin')
+        {
+            return response()->json(['message' => 'Unauthorized'], Status::UNAUTHORIZED);
         }
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+            'password' => 'required|min:8',
+        ]);
 
         $user = User::create([
             'name' => $request->input('name'),
@@ -33,31 +31,7 @@ class AuthController extends Controller
             'status' => 'approved'
         ]);
 
-        return response()->json(['message' => 'User created successfully!'], Status::SUCCESS);
-    }
-
-    public function hrSelfRegister(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-            'password' => 'required',
-        ]);
-
-        $existingUser = User::where('email', $request->input('email'))->first();
-        if ($existingUser) {
-            return response()->json(['message' => 'HR user already exists'], Status::INVALID_REQUEST);
-        }
-
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'role' => 'hr',
-            'status' => 'pending',
-        ]);
-
-        return response()->json(['message' => 'HR registered successfully!'], Status::SUCCESS);
+        return response()->json(['message' => auth()->check() ? 'Hr Created Successfully!' : 'You Are Registered Successfully!'], Status::SUCCESS);
     }
 
     public function updateUserStatus(Request $request, $id)
