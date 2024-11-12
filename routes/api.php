@@ -21,7 +21,7 @@ Route::group(['prefix' => 'auth'], function () {
 #Admin
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'is_admin']], function () {
     Route::controller(AuthController::class)->group(function(){
-        Route::post('/admin-hr-register', 'register');
+        Route::post('/hr-register', 'register');
         Route::get('/hrs', 'showAllHRS');
         Route::delete('/delete-hr/{id}', 'deleteHR');
         Route::put('/update-hr/{id}', 'updateHR');

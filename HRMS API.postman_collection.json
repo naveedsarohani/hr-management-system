@@ -92,7 +92,7 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "admin@gmail.com",
+									"value": "hr1@gmail.com",
 									"type": "text"
 								},
 								{
@@ -360,7 +360,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "update",
+									"value": "updatenewhr",
 									"type": "text"
 								},
 								{
@@ -376,19 +376,20 @@
 								{
 									"key": "role",
 									"value": "hr",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
 						"url": {
-							"raw": "{{host}}/admin/update-hr/18",
+							"raw": "{{host}}/admin/update-hr/7",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"admin",
 								"update-hr",
-								"18"
+								"7"
 							]
 						}
 					},
@@ -558,7 +559,7 @@
 								},
 								{
 									"key": "email",
-									"value": "naveed.sarohani@gmail.com",
+									"value": "naveed.sarohani1@gmail.com",
 									"type": "text"
 								},
 								{
@@ -1456,13 +1457,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{host}}/compensations/2",
+							"raw": "{{host}}/compensations/25",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"compensations",
-								"2"
+								"25"
 							]
 						}
 					},
