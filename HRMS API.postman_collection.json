@@ -92,7 +92,7 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "hr1@gmail.com",
+									"value": "admin@gmail.com",
 									"type": "text"
 								},
 								{
@@ -186,14 +186,14 @@
 							]
 						},
 						"url": {
-							"raw": "{{host}}/admin/update-status-hr/7",
+							"raw": "{{host}}/admin/update-status-hr/15",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"admin",
 								"update-status-hr",
-								"7"
+								"15"
 							]
 						}
 					},
@@ -220,7 +220,7 @@
 								},
 								{
 									"key": "email",
-									"value": "naveedsdfhr@gmail.com",
+									"value": "aashique@gmail.com",
 									"type": "text"
 								},
 								{
@@ -375,9 +375,8 @@
 								},
 								{
 									"key": "role",
-									"value": "hr",
-									"type": "text",
-									"disabled": true
+									"value": "hrjhj",
+									"type": "text"
 								}
 							]
 						},
@@ -752,7 +751,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "29|Di9qNXme6PpeurEDe6yCAznOukZmuqh269Nz3zHH21452dba",
+									"value": "{{auth_token}}",
 									"type": "string"
 								}
 							]
@@ -790,7 +789,7 @@
 								},
 								{
 									"key": "feedback",
-									"value": "This is the first feedback for employee 1",
+									"value": "kjkljkl",
 									"type": "text"
 								}
 							]
@@ -887,6 +886,16 @@
 				{
 					"name": "Update - Record",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -915,29 +924,29 @@
 								},
 								{
 									"key": "review_date",
-									"value": "2024-11-11",
+									"value": "2024-11-6",
 									"type": "text"
 								},
 								{
-									"key": "kpi_store",
-									"value": "50",
+									"key": "kpi_score",
+									"value": "12",
 									"type": "text"
 								},
 								{
-									"key": "feedbacks",
-									"value": "update feedback",
+									"key": "feedback",
+									"value": "updatekjjkhjkhkjh",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{host}}/performance-reviews/1",
+							"raw": "{{host}}/performance-reviews/6",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"performance-reviews",
-								"1"
+								"6"
 							]
 						}
 					},
