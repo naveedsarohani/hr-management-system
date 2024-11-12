@@ -57,7 +57,7 @@ class PerformanceReviewController extends Controller
         $review = PerformanceReview::find($id);
 
         if (!$review) {
-            return response()->json(['message' => 'Review not found'], 404);
+            return response()->json(['message' => 'Review not found'], Status::NOT_FOUND);
         }
 
         $request->validate([
@@ -68,7 +68,7 @@ class PerformanceReviewController extends Controller
         ]);
 
         $review->update($request->all());
-        return response()->json(['message', 'Performance Review Update Successfully'], Status::SUCCESS);
+        return response()->json(['message' => 'Performance Review Update Successfully'], Status::SUCCESS);
     }
 
     /**
@@ -83,6 +83,6 @@ class PerformanceReviewController extends Controller
         }
 
         $review->delete();
-        return response()->json(['message', 'Performance Review Delete Successfully'], Status::SUCCESS);
+        return response()->json(['message' => 'Performance Review Delete Successfully'], Status::SUCCESS);
     }
 }

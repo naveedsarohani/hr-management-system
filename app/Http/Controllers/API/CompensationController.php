@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Constants\Status;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Compensation;
 
@@ -35,7 +36,7 @@ class CompensationController extends Controller
         $compensation->total_compensation = $request->base_salary + $request->bonus;
         $compensation->save();
 
-        return response()->json(['message', 'Compensation Add Successfully', Status::SUCCESS]);
+        return response()->json(['message' => 'Compensation Add Successfully', Status::SUCCESS]);
     }
 
     /**
@@ -56,16 +57,39 @@ class CompensationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $compensation = Compensation::find($id);
 
+        if (!$compensation) {
+            return response()->json(['message' => 'Compensation not found'], Status::NOT_FOUND);
+        }
+
+        $request->validate([
+            'base_salary' => 'numeric',
+            'bonus' => 'numeric',
+        ]);
+
+        $compensation->base_salary = $request->base_salary;
+        $compensation->bonus = $request->bonus;
+        $compensation->total_compensation = $request->base_salary + $request->bonus;
+        $compensation->save();
+
+        return response()->json(['message' => 'Compensation Update Successfully'], Status::SUCCESS);
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+
+        $compensation = Compensation::find($id);
+
+        if (!$compensation) {
+            return response()->json(['message' => 'Compensation not found'], 404);
+        }
+
+        $compensation->delete();
+        return response()->json(['message' => 'Compensation Delete Successfully'], Status::SUCCESS);
     }
 }
