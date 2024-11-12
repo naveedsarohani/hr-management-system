@@ -30,7 +30,7 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'role' => 'hr',
-            'status' => 'pending'
+            'status' => 'approved'
         ]);
 
         return response()->json(['message' => 'User created successfully!'], Status::SUCCESS);
