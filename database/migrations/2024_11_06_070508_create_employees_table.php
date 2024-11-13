@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('department', 255);
             $table->string('position', 255);
             $table->date('date_of_joining');
+            $table->string('in_time', 10);
+            $table->string('out_time', 10);
             $table->timestamps();
         });
     }

@@ -17,8 +17,14 @@ class Employee extends Model
         'address',
         'department',
         'position',
-        'date_of_joining'
+        'date_of_joining',
+        'in_time',
+        'out_time'
     ];
+
+    public function User(){
+        return $this->belongsTo(User::class,'user_id','id');
+    }
 
     public function performanceReview()
     {

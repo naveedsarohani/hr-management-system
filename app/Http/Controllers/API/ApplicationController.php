@@ -63,7 +63,7 @@ class ApplicationController extends Controller
     public function show(string $applicationId)
     {
         try {
-            if (!$application = Application::find($applicationId)) {
+            if (!$application = Application::with('job')->find($applicationId)) {
                 return $this->errorResponse(Status::NOT_FOUND, 'invalid job application ID');
             };
 
