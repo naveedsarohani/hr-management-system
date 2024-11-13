@@ -15,7 +15,7 @@ class EmployeeController extends Controller
     public function index()
     {
         try {
-            $employees = Employee::all();
+            $employees = Employee::with('user')->get();
             return $this->successResponse(Status::SUCCESS, 'all employees records', compact('employees'));
         } catch (Exception $e) {
             return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
@@ -26,13 +26,15 @@ class EmployeeController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'first_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
-            'last_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
+            'last_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:2|max:100',
             'email' => 'required|email:rfc,dns|unique:employees,email',
             'phone' => 'sometimes|required|numeric|regex:/\+?[0-9]{10,11}$/',
             'address' => 'required|min:10|max:255',
             'department' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'position' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'date_of_joining' => 'required|date',
+            'in_time' => 'required|flexible_time',
+            'out_time' => 'required|flexible_time',
         ]);
 
         if ($validation->fails()) {
@@ -57,7 +59,7 @@ class EmployeeController extends Controller
     public function show(string $employeeId)
     {
         try {
-            $employee = Employee::find($employeeId);
+            $employee = Employee::with('user')->find($employeeId);
             if (!$employee) {
                 return $this->errorResponse(Status::NOT_FOUND, 'invalid employee ID');
             };
@@ -72,13 +74,15 @@ class EmployeeController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'first_name' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
-            'last_name' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
+            'last_name' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:2|max:100',
             'email' => 'sometimes|required|email:rfc,dns|unique:employees,email,' . $employeeId . ',id',
             'phone' => 'sometimes|required|numeric|regex:/\+?[0-9]{10,11}$/',
             'address' => 'sometimes|required|min:10|max:255',
             'department' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'position' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'date_of_joining' => 'sometimes|required|date',
+            'in_time' => 'required|flexible_time',
+            'out_time' => 'required|flexible_time',
         ]);
 
         if ($validation->fails()) {

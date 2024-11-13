@@ -26,6 +26,8 @@ class EmployeeFactory extends Factory
             'department' => fake()->company(),
             'position' => fake()->jobTitle(),
             'date_of_joining' => fake()->date(),
+            'in_time' => '09:00 AM',
+            'out_time' => '05:00 PM',
         ];
     }
 }
