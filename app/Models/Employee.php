@@ -24,4 +24,9 @@ class Employee extends Model
     {
         return $this->hasMany(PerformanceReview::class);
     }
+
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 }

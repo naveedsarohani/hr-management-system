@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\ApplicationController;
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\API\EmployeeController;
 use App\Http\Controllers\ApI\AuthController;
 use App\Http\Controllers\API\JobController;
@@ -36,6 +37,9 @@ Route::apiResource('performance-reviews', PerformanceReviewController::class)->m
 
 #Compensations
 Route::apiResource('compensations', CompensationController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
+
+#Attendance
+Route::apiResource('attendance', AttendanceController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
 
 
 // ROUTES MAINTAINED BY NAVEED
