@@ -34,7 +34,7 @@ class ApplicationController extends Controller
         ]);
 
         if ($validation->fails()) {
-            return $this->errorResponse(Status::INVALID_REQUEST, 'there was validation failure', $validation->errors()->toArray());
+            return $this->errorResponse(Status::INVALID_REQUEST, 'there wass validation failure', $validation->errors()->toArray());
         }
 
         try {

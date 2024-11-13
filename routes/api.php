@@ -22,7 +22,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 #Admin
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'is_admin']], function () {
-    Route::controller(AuthController::class)->group(function(){
+    Route::controller(AuthController::class)->group(function () {
         Route::post('/hr-register', 'register');
         Route::get('/hrs', 'showAllHRS');
         Route::delete('/delete-hr/{id}', 'deleteHR');
@@ -49,8 +49,8 @@ Route::apiResource('employees', EmployeeController::class)->middleware('auth:san
 # jobs
 Route::controller(JobController::class)->prefix('jobs')->group(function () {
     Route::get('/', 'index');
-    Route::get('/get/{id}', 'show');
-    Route::get('/search', 'search');
+    Route::get('/{id}', 'show');
+    Route::get('/get/search', 'search');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'store');
@@ -60,10 +60,8 @@ Route::controller(JobController::class)->prefix('jobs')->group(function () {
 });
 
 # applications
-Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
-Route::middleware('auth:sanctum')->get('applications/filter', [ApplicationController::class, 'filter']);
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('applications/get/search', [ApplicationController::class, 'search']);
-    Route::apiResource('applications', ApplicationController::class);
+    Route::apiResource('applications', ApplicationController::class)->except('store');
 });
+Route::post('applications/', [ApplicationController::class, 'store']);
