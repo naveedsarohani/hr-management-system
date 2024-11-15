@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use DateTime;
 use NunoMaduro\Collision\Adapters\Phpunit\State;
@@ -25,25 +26,44 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        $today = date('Y-m-d');
+
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
-            'date' => 'required|date',
-            'check_in_time' => 'required|date_format:h:i A',
-            'check_out_time' => 'required|date_format:h:i A',
-            'status' => 'required|in:present,absent,on leave'
+            'date' => 'required|date|after_or_equal:'.$today,
+            'status' => 'required|in:present,absent,on leave',
+            'time' => [
+            'required_if:status,present',
+            'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/'
+            ]
         ]);
 
-        $checkInTime = DateTime::createFromFormat('h:i A', $request->check_in_time)->format('H:i');
-        $checkOutTime = DateTime::createFromFormat('h:i A', $request->check_out_time)->format('H:i');
+        $employee = Employee::find($request->employee_id);
+
+        if ($request->status != 'absent' && $request->status != 'on leave') {
+            $formattedTime = DateTime::createFromFormat('h:i A', $request->time)->format('H:i');
+            $request->merge(['time' => $formattedTime]);
+        } else {
+            $request->merge(['time' => null]);
+        }
+
+        $existingAttendance = Attendance::where('employee_id', $request->employee_id)
+                                    ->where('date', $request->date)
+                                    ->exists();
+
+        if ($existingAttendance) {
+            return response()->json(['message' => 'Attendance already exists for today.'], Status::INVALID_REQUEST);
+        }
 
         $attendance = Attendance::create([
             'employee_id' => $request->employee_id,
             'date' => $request->date,
-            'check_in_time' => $checkInTime,
-            'check_out_time' => $checkOutTime,
+            'time' => $request->time,
             'status' => $request->status
         ]);
-        return response()->json(['message' => 'Attendance Add Successfully', Status::SUCCESS]);
+
+        return response()->json(['message' => 'Attendance added successfully'], Status::SUCCESS);
     }
 
     /**
@@ -64,35 +84,50 @@ class AttendanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $attendance = Attendance::find($id);
 
         if (!$attendance) {
-            return response()->json(['message' => 'Attendance not found'], Status::NOT_FOUND);
+            return response()->json(['message' => 'Attendance Not Found.'], Status::NOT_FOUND);
         }
 
         $request->validate([
-            'date' => 'date',
-            'check_in_time' => 'date_format:h:i A',
-            'check_out_time' => 'date_format:h:i A',
-            'status' => 'in:present,absent,on leave'
+            'employee_id' => 'nullable|exists:employees,id',
+            'date' => 'nullable|date',
+            'status' => 'nullable|in:present,absent,on leave',
+            'time' => [
+                'nullable',
+                'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/',
+                'required_if:status,present',
+            ],
         ]);
 
-        $checkInTime = DateTime::createFromFormat('h:i A', $request->check_in_time)->format('H:i');
-        $checkOutTime = DateTime::createFromFormat('h:i A', $request->check_out_time)->format('H:i');
+        if ($request->has('status') && $request->status != 'absent' && $request->status != 'on leave') {
+            $formattedTime = DateTime::createFromFormat('h:i A', $request->time)->format('H:i');
+            $request->merge(['time' => $formattedTime]);
+        } elseif ($request->has('status') && in_array($request->status, ['absent', 'on leave'])) {
+            $request->merge(['time' => null]);
+        }
+
+        $existingAttendance = Attendance::where('employee_id', $request->employee_id)
+                                    ->where('date', $request->date)
+                                    ->where('id', '!=', $id)
+                                    ->exists();
+
+        if ($existingAttendance) {
+            return response()->json(['message' => 'Attendance already exists for today.'], Status::INVALID_REQUEST);
+        }
 
         $attendance->update([
+            'employee_id' => $request->employee_id,
             'date' => $request->date,
-            'check_in_time' => $checkInTime,
-            'check_out_time' => $checkOutTime,
-            'status' => $request->status
+            'time' => $request->time,
+            'status' => $request->status,
         ]);
 
         return response()->json(['message' => 'Attendance updated successfully'], Status::SUCCESS);
-
     }
-
     /**
      * Remove the specified resource from storage.
      */
