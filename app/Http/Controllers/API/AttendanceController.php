@@ -28,14 +28,15 @@ class AttendanceController extends Controller
     {
         $yesterday = date('Y-m-d', strtotime('-1 day'));
         $today = date('Y-m-d');
+        $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
-            'date' => 'required|date|after_or_equal:'.$today,
+            'date' => 'required|date|after_or_equal:'.$yesterday.'|before_or_equal:'.$today,
             'status' => 'required|in:present,absent,on leave',
             'time' => [
-            'required_if:status,present',
-            'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/'
+                'required_if:status,present',
+                'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/'
             ]
         ]);
 
@@ -49,8 +50,8 @@ class AttendanceController extends Controller
         }
 
         $existingAttendance = Attendance::where('employee_id', $request->employee_id)
-                                    ->where('date', $request->date)
-                                    ->exists();
+            ->where('date', $request->date)
+            ->exists();
 
         if ($existingAttendance) {
             return response()->json(['message' => 'Attendance already exists for today.'], Status::INVALID_REQUEST);
@@ -92,9 +93,11 @@ class AttendanceController extends Controller
             return response()->json(['message' => 'Attendance Not Found.'], Status::NOT_FOUND);
         }
 
+        $today = date('Y-m-d');
+
         $request->validate([
             'employee_id' => 'nullable|exists:employees,id',
-            'date' => 'nullable|date',
+            'date' => 'nullable|date|before_or_equal:'.$today,
             'status' => 'nullable|in:present,absent,on leave',
             'time' => [
                 'nullable',
@@ -108,6 +111,10 @@ class AttendanceController extends Controller
             $request->merge(['time' => $formattedTime]);
         } elseif ($request->has('status') && in_array($request->status, ['absent', 'on leave'])) {
             $request->merge(['time' => null]);
+        }
+
+        if ($request->date > $today && $attendance->date != $request->date) {
+            return response()->json(['message' => 'Cannot update attendance for future dates.'], Status::INVALID_REQUEST);
         }
 
         $existingAttendance = Attendance::where('employee_id', $request->employee_id)
