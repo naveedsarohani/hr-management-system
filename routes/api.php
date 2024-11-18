@@ -50,7 +50,6 @@ Route::apiResource('employees', EmployeeController::class)->middleware('auth:san
 Route::controller(JobController::class)->prefix('jobs')->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
-    Route::get('/get/search', 'search');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'store');

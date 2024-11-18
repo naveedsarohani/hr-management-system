@@ -11,10 +11,15 @@ use Illuminate\Support\Facades\Validator;
 
 class JobController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $jobs = Job::all();
+            if ($q = $request->get('q')) {
+                $jobs = Job::where('title', 'like', "%{$q}%")->orWhere('description', 'like', "%{$q}%")->orWhere('status', 'like', "%{$q}%")->get();
+            } else {
+                $jobs = Job::all();
+            }
+
             return $this->successResponse(Status::SUCCESS, 'all job records', compact('jobs'));
         } catch (Exception $e) {
             return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
@@ -57,20 +62,20 @@ class JobController extends Controller
         }
     }
 
-    public function search(Request $request)
-    {
-        if (!$q = $request->get('q')) {
-            return $this->errorResponse(Status::INVALID_REQUEST, 'the query parameter must be set');
-        }
+    // public function search(Request $request)
+    // {
+    //     if (!$q = $request->get('q')) {
+    //         return $this->errorResponse(Status::INVALID_REQUEST, 'the query parameter must be set');
+    //     }
 
-        try {
-            $filterredJobs = Job::where('title', 'like', "%{$q}%")->orWhere('description', 'like', "%{$q}%")->orWhere('status', 'like', "%{$q}%")->get();
+    //     try {
+    //         $filterredJobs = Job::where('title', 'like', "%{$q}%")->orWhere('description', 'like', "%{$q}%")->orWhere('status', 'like', "%{$q}%")->get();
 
-            return $this->successResponse(Status::SUCCESS, 'matched job advertisements against query', compact('filterredJobs'));
-        } catch (Exception $e) {
-            return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
-        }
-    }
+    //         return $this->successResponse(Status::SUCCESS, 'matched job advertisements against query', compact('filterredJobs'));
+    //     } catch (Exception $e) {
+    //         return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
+    //     }
+    // }
 
     public function update(Request $request, string $jobId)
     {

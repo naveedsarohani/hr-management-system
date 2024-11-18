@@ -13,10 +13,13 @@ use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $applications = Application::with('job')->get();
+            if ($q = $request->get('q')) {
+                $applications = Application::with('job')->where('status', 'like', "%{$q}%")->orWhere('candidate_name', 'like', "%{$q}%")->get();
+            } else $applications = Application::with('job')->get();
+
             return $this->successResponse(Status::SUCCESS, 'all appplications with job data', compact('applications'));
         } catch (Exception $e) {
             return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
@@ -30,7 +33,7 @@ class ApplicationController extends Controller
             'candidate_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:255',
             'email' => 'required|email:rfc,dns|unique:applications,email',
             'status' => 'required|in:pending,interview,hired,rejected',
-            'resume' => 'required|mimes:pdf',
+            'resume' => 'required|mimes:pdf|max:3072',
         ]);
 
         if ($validation->fails()) {
@@ -68,21 +71,6 @@ class ApplicationController extends Controller
             };
 
             return $this->successResponse(Status::SUCCESS, 'requested job application', compact('application'));
-        } catch (Exception $e) {
-            return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
-        }
-    }
-
-    public function search(Request $request)
-    {
-        if (!$q = $request->get('q')) {
-            return $this->errorResponse(Status::INVALID_REQUEST, 'the query parameter must be set');
-        }
-
-        try {
-            $filterredApplications = Application::with('job')->where('status', 'like', "%{$q}%")->orWhere('candidate_name', 'like', "%{$q}%")->get();
-
-            return $this->successResponse(Status::SUCCESS, 'matched job advertisements against query', compact('filterredApplications'));
         } catch (Exception $e) {
             return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
         }
