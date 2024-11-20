@@ -8,7 +8,6 @@ use App\Models\Attendance;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use DateTime;
-use NunoMaduro\Collision\Adapters\Phpunit\State;
 
 class AttendanceController extends Controller
 {
@@ -19,18 +18,12 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::with('employee')->get();
 
-<<<<<<< HEAD
-        if($attendance->isEmpty())
-        {
-            return response()->json(['message' => 'No Records Found'], Status::NOT_FOUND);
-=======
         if ($attendance->isEmpty()) {
             return response()->json([
                 'message' => 'No Records Found',
                 'status' => Status::NOT_FOUND,
                 'errors' => ['attendance' => ['No records found.']]
             ], Status::NOT_FOUND);
->>>>>>> e5e374504821859c2ca1e7288afb17a8a05d1d6e
         }
 
         return response()->json(['attendance', $attendance], Status::SUCCESS);

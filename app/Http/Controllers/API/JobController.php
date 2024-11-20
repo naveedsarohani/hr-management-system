@@ -80,8 +80,9 @@ class JobController extends Controller
             'salary_range' => 'sometimes|required|regex:/^[50-70]+k$/',
             'qualifications' => 'sometimes|required|min:10|max:255',
             'benefits' => 'sometimes|required|nullable',
+            'skills_required' => 'sometimes|required|nullable',
             'status' => 'sometimes|required|in:open,closed',
-        ]);
+        ]);;
 
         if ($validation->fails()) {
             return $this->errorResponse(Status::INVALID_REQUEST, 'there was validation failure', $validation->errors()->toArray());
