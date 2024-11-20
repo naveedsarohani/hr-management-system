@@ -18,6 +18,12 @@ class AttendanceController extends Controller
     public function index()
     {
         $attendance = Attendance::with('employee')->get();
+
+        if($attendance->isEmpty())
+        {
+            return response()->json(['message' => 'No Records Found'], Status::NOT_FOUND);
+        }
+
         return response()->json(['attendance', $attendance], Status::SUCCESS);
     }
 
@@ -33,13 +39,15 @@ class AttendanceController extends Controller
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
             'date' => 'required|date|after_or_equal:'.$yesterday.'|before_or_equal:'.$today,
-            'status' => 'required|in:present,absent,on leave',
+            'status' => [
+                'required',
+                'regex:/^(present|absent|on leave)$/i'
+            ],
             'time' => [
                 'required_if:status,present',
                 'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/'
             ]
         ]);
-
         $employee = Employee::find($request->employee_id);
 
         if ($request->status != 'absent' && $request->status != 'on leave') {
@@ -98,7 +106,10 @@ class AttendanceController extends Controller
         $request->validate([
             'employee_id' => 'nullable|exists:employees,id',
             'date' => 'nullable|date|before_or_equal:'.$today,
-            'status' => 'nullable|in:present,absent,on leave',
+            'status' => [
+                'nullable',
+                'regex:/^(present|absent|on leave)$/i'
+            ],
             'time' => [
                 'nullable',
                 'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/',

@@ -31,6 +31,13 @@ class JobController extends Controller
         $validation = Validator::make($data = $request->all(), [
             'title' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:10|max:255',
             'description' => 'required|min:10',
+            'experience' => 'required|min:10|max:255',
+            'employment_type' => 'required|in:full-time,part-time,contract,internship',
+            'job_location' => 'required|min:10|max:255',
+            'salary_range' => 'required|regex:/^[50-70]+k$/',
+            'qualifications' => 'required|min:10|max:255',
+            'benefits' => 'required|nullable',
+            'skills_required' => 'required|nullable',
             'status' => 'required|in:open,closed',
         ]);
 
@@ -62,26 +69,17 @@ class JobController extends Controller
         }
     }
 
-    // public function search(Request $request)
-    // {
-    //     if (!$q = $request->get('q')) {
-    //         return $this->errorResponse(Status::INVALID_REQUEST, 'the query parameter must be set');
-    //     }
-
-    //     try {
-    //         $filterredJobs = Job::where('title', 'like', "%{$q}%")->orWhere('description', 'like', "%{$q}%")->orWhere('status', 'like', "%{$q}%")->get();
-
-    //         return $this->successResponse(Status::SUCCESS, 'matched job advertisements against query', compact('filterredJobs'));
-    //     } catch (Exception $e) {
-    //         return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
-    //     }
-    // }
-
     public function update(Request $request, string $jobId)
     {
         $validation = Validator::make($request->all(), [
             'title' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:10|max:255',
             'description' => 'sometimes|required|min:10',
+            'experience' => 'sometimes|required|min:10|max:255',
+            'employment_type' => 'sometimes|required|in:full-time,part-time,contract,internship',
+            'job_location' => 'sometimes|required|min:10|max:255',
+            'salary_range' => 'sometimes|required|regex:/^[50-70]+k$/',
+            'qualifications' => 'sometimes|required|min:10|max:255',
+            'benefits' => 'sometimes|required|nullable',
             'status' => 'sometimes|required|in:open,closed',
         ]);
 

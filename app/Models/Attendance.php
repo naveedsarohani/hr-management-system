@@ -14,8 +14,7 @@ class Attendance extends Model
     protected $fillable = [
         'employee_id',
         'date',
-        'check_in_time',
-        'check_out_time',
+        'time',
         'status'
     ];
 
