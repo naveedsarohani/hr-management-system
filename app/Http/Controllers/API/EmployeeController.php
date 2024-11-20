@@ -33,8 +33,9 @@ class EmployeeController extends Controller
             'department' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'position' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'date_of_joining' => 'required|date',
-            'in_time' => 'required|flexible_time',
-            'out_time' => 'required|flexible_time',
+            'office_in_timing' => 'required|flexible_time',
+            'office_out_timing' => 'required|flexible_time',
+            'status' => 'required|in:terminate,active',
         ]);
 
         if ($validation->fails()) {
@@ -81,8 +82,9 @@ class EmployeeController extends Controller
             'department' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'position' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'date_of_joining' => 'sometimes|required|date',
-            'in_time' => 'required|flexible_time',
-            'out_time' => 'required|flexible_time',
+            'office_in_timing' => 'sometimes|required|flexible_time',
+            'office_out_timing' => 'sometimes|required|flexible_time',
+            'status' => 'sometimes|required|in:terminate,active',
         ]);
 
         if ($validation->fails()) {

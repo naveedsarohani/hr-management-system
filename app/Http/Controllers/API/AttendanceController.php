@@ -19,12 +19,18 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::with('employee')->get();
 
+<<<<<<< HEAD
+        if($attendance->isEmpty())
+        {
+            return response()->json(['message' => 'No Records Found'], Status::NOT_FOUND);
+=======
         if ($attendance->isEmpty()) {
             return response()->json([
                 'message' => 'No Records Found',
                 'status' => Status::NOT_FOUND,
                 'errors' => ['attendance' => ['No records found.']]
             ], Status::NOT_FOUND);
+>>>>>>> e5e374504821859c2ca1e7288afb17a8a05d1d6e
         }
 
         return response()->json(['attendance' => $attendance], Status::SUCCESS);
@@ -51,7 +57,6 @@ class AttendanceController extends Controller
                 'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/'
             ]
         ]);
-
         $employee = Employee::find($request->employee_id);
 
         if ($request->status != 'absent' && $request->status != 'on leave') {

@@ -18,7 +18,11 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->date('date');
             $table->time('time');
+<<<<<<< HEAD
+            $table->enum('status', ['present', 'absent', 'on leave']);
+=======
             $table->enum('status',['present', 'absent', 'on leave']);
+>>>>>>> e5e374504821859c2ca1e7288afb17a8a05d1d6e
             $table->timestamps();
         });
     }

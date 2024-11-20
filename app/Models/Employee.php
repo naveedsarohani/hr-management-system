@@ -18,12 +18,14 @@ class Employee extends Model
         'department',
         'position',
         'date_of_joining',
-        'in_time',
-        'out_time'
+        'office_in_timing',
+        'office_out_timing',
+        'status'
     ];
 
-    public function User(){
-        return $this->belongsTo(User::class,'user_id','id');
+    public function User()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function performanceReview()
