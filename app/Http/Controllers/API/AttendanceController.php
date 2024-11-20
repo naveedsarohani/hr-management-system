@@ -64,7 +64,11 @@ class AttendanceController extends Controller
             ->exists();
 
         if ($existingAttendance) {
-            return response()->json(['message' => 'Attendance already exists for today.'], Status::INVALID_REQUEST);
+                return response()->json([
+                    'message' => 'Attendance already exists for today.',
+                    'status' => Status::INVALID_REQUEST,
+                    'errors' => ['attendance' => ['Attendance already exists for today.']]
+                ], Status::INVALID_REQUEST);
         }
 
         $attendance = Attendance::create([
