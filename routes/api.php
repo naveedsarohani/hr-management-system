@@ -7,6 +7,9 @@ use App\Http\Controllers\ApI\AuthController;
 use App\Http\Controllers\API\JobController;
 use App\Http\Controllers\ApI\PerformanceReviewController;
 use App\Http\Controllers\API\CompensationController;
+use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\PositionController;
+use App\Models\Department;
 use Illuminate\Support\Facades\Route;
 
 /*Routes Maintained BY Wajid Laghari*/
@@ -40,6 +43,12 @@ Route::apiResource('compensations', CompensationController::class)->middleware([
 
 #Attendance
 Route::apiResource('attendance', AttendanceController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
+
+#Department
+Route::apiResource('departments', DepartmentController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
+
+#Position
+Route::apiResource('positions', PositionController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
 
 
 // ROUTES MAINTAINED BY NAVEED

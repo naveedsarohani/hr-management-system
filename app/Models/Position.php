@@ -5,17 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Attendance extends Model
+class Position extends Model
 {
     use HasFactory;
 
-    public $table = 'attendance';
-
+    public $table = 'positions';
     protected $fillable = [
         'employee_id',
-        'date',
-        'time',
-        'status'
+        'job_position'
     ];
 
     public function employee()

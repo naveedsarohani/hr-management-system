@@ -18,6 +18,15 @@ class AttendanceController extends Controller
     public function index()
     {
         $attendance = Attendance::with('employee')->get();
+
+        if ($attendance->isEmpty()) {
+            return response()->json([
+                'message' => 'No Records Found',
+                'status' => Status::NOT_FOUND,
+                'errors' => ['attendance' => ['No records found.']]
+            ], Status::NOT_FOUND);
+        }
+
         return response()->json(['attendance', $attendance], Status::SUCCESS);
     }
 
@@ -33,7 +42,10 @@ class AttendanceController extends Controller
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
             'date' => 'required|date|after_or_equal:'.$yesterday.'|before_or_equal:'.$today,
-            'status' => 'required|in:present,absent,on leave',
+            'status' => [
+                'required',
+                'regex:/^(present|absent|on leave)$/i'
+            ],
             'time' => [
                 'required_if:status,present',
                 'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/'
@@ -74,9 +86,13 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::find($id);
 
-        if(!$attendance)
-        {
-            return response()->json(['message' => 'Attendance Not Found'], Status::NOT_FOUND);
+
+        if (!$attendance) {
+            return response()->json([
+                'message' => 'Attendance Not Found',
+                'status' => Status::NOT_FOUND,
+                'errors' => ['attendance' => ['Attendance not found.']]
+            ], Status::NOT_FOUND);
         }
 
         return response()->json(['attendance' => $attendance], Status::SUCCESS);
@@ -90,7 +106,11 @@ class AttendanceController extends Controller
         $attendance = Attendance::find($id);
 
         if (!$attendance) {
-            return response()->json(['message' => 'Attendance Not Found.'], Status::NOT_FOUND);
+            return response()->json([
+                'message' => 'Attendance Not Found.',
+                'status' => Status::NOT_FOUND,
+                'errors' => ['attendance' => ['Attendance not found.']]
+            ], Status::NOT_FOUND);
         }
 
         $today = date('Y-m-d');
@@ -98,7 +118,10 @@ class AttendanceController extends Controller
         $request->validate([
             'employee_id' => 'nullable|exists:employees,id',
             'date' => 'nullable|date|before_or_equal:'.$today,
-            'status' => 'nullable|in:present,absent,on leave',
+            'status' => [
+                'nullable',
+                'regex:/^(present|absent|on leave)$/i'
+            ],
             'time' => [
                 'nullable',
                 'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/',
@@ -122,8 +145,14 @@ class AttendanceController extends Controller
                                     ->where('id', '!=', $id)
                                     ->exists();
 
-        if ($existingAttendance) {
-            return response()->json(['message' => 'Attendance already exists for today.'], Status::INVALID_REQUEST);
+      if ($existingAttendance) {
+            return response()->json([
+                'message' => 'Attendance already exists for today.',
+                'status' => Status::INVALID_REQUEST,
+                'errors' => [
+                    'attendance' => ['Attendance already exists for today.']
+                ]
+            ], Status::INVALID_REQUEST);
         }
 
         $attendance->update([
@@ -143,7 +172,11 @@ class AttendanceController extends Controller
         $attendance = Attendance::find($id);
 
         if (!$attendance) {
-            return response()->json(['message' => 'Attendance Not Found'], Status::NOT_FOUND);
+            return response()->json([
+                'message' => 'Attendance Not Found',
+                'status' => Status::NOT_FOUND,
+                'errors' => ['attendance' => ['Attendance not found.']]
+            ], Status::NOT_FOUND);
         }
 
         $attendance->delete();
