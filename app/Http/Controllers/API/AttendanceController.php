@@ -27,7 +27,7 @@ class AttendanceController extends Controller
             ], Status::NOT_FOUND);
         }
 
-        return response()->json(['attendance', $attendance], Status::SUCCESS);
+        return response()->json(['attendance' => $attendance], Status::SUCCESS);
     }
 
     /**
