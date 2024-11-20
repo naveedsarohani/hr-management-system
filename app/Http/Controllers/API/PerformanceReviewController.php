@@ -15,6 +15,12 @@ class PerformanceReviewController extends Controller
     public function index()
     {
         $reviews = PerformanceReview::with('employee')->get();
+
+        if($reviews->isEmpty())
+        {
+            return response()->json(['message' => 'No Records Found'], Status::NOT_FOUND);
+        }
+
         return response()->json(['review' => $reviews], Status::SUCCESS);
     }
 

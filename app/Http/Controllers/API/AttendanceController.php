@@ -19,9 +19,18 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::with('employee')->get();
 
+<<<<<<< HEAD
         if($attendance->isEmpty())
         {
             return response()->json(['message' => 'No Records Found'], Status::NOT_FOUND);
+=======
+        if ($attendance->isEmpty()) {
+            return response()->json([
+                'message' => 'No Records Found',
+                'status' => Status::NOT_FOUND,
+                'errors' => ['attendance' => ['No records found.']]
+            ], Status::NOT_FOUND);
+>>>>>>> e5e374504821859c2ca1e7288afb17a8a05d1d6e
         }
 
         return response()->json(['attendance', $attendance], Status::SUCCESS);
@@ -82,9 +91,13 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::find($id);
 
-        if(!$attendance)
-        {
-            return response()->json(['message' => 'Attendance Not Found'], Status::NOT_FOUND);
+
+        if (!$attendance) {
+            return response()->json([
+                'message' => 'Attendance Not Found',
+                'status' => Status::NOT_FOUND,
+                'errors' => ['attendance' => ['Attendance not found.']]
+            ], Status::NOT_FOUND);
         }
 
         return response()->json(['attendance' => $attendance], Status::SUCCESS);
@@ -98,7 +111,11 @@ class AttendanceController extends Controller
         $attendance = Attendance::find($id);
 
         if (!$attendance) {
-            return response()->json(['message' => 'Attendance Not Found.'], Status::NOT_FOUND);
+            return response()->json([
+                'message' => 'Attendance Not Found.',
+                'status' => Status::NOT_FOUND,
+                'errors' => ['attendance' => ['Attendance not found.']]
+            ], Status::NOT_FOUND);
         }
 
         $today = date('Y-m-d');
@@ -133,8 +150,14 @@ class AttendanceController extends Controller
                                     ->where('id', '!=', $id)
                                     ->exists();
 
-        if ($existingAttendance) {
-            return response()->json(['message' => 'Attendance already exists for today.'], Status::INVALID_REQUEST);
+      if ($existingAttendance) {
+            return response()->json([
+                'message' => 'Attendance already exists for today.',
+                'status' => Status::INVALID_REQUEST,
+                'errors' => [
+                    'attendance' => ['Attendance already exists for today.']
+                ]
+            ], Status::INVALID_REQUEST);
         }
 
         $attendance->update([
@@ -154,7 +177,11 @@ class AttendanceController extends Controller
         $attendance = Attendance::find($id);
 
         if (!$attendance) {
-            return response()->json(['message' => 'Attendance Not Found'], Status::NOT_FOUND);
+            return response()->json([
+                'message' => 'Attendance Not Found',
+                'status' => Status::NOT_FOUND,
+                'errors' => ['attendance' => ['Attendance not found.']]
+            ], Status::NOT_FOUND);
         }
 
         $attendance->delete();

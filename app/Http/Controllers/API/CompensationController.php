@@ -15,6 +15,12 @@ class CompensationController extends Controller
     public function index()
     {
         $compensations = Compensation::with('employee')->get();
+
+        if($compensations->isEmpty())
+        {
+            return response()->json(['message' => 'No Records Found'], Status::NOT_FOUND);
+        }
+
         return response()->json(['compensation', $compensations], Status::SUCCESS);
     }
 
