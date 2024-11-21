@@ -11,4 +11,9 @@ class Department extends Model
 
     public $table = 'departments';
     protected $fillable = ['title'];
+
+    public function jobHistories()
+    {
+        return $this->hasMany(JobHistory::class);
+    }
 }

@@ -19,4 +19,9 @@ class Position extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+
+    public function jobHistories()
+    {
+        return $this->hasMany(JobHistory::class);
+    }
 }
