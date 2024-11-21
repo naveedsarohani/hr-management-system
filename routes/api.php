@@ -8,6 +8,7 @@ use App\Http\Controllers\API\JobController;
 use App\Http\Controllers\ApI\PerformanceReviewController;
 use App\Http\Controllers\API\CompensationController;
 use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\API\JobHistoryController;
 use App\Http\Controllers\Api\PositionController;
 use App\Models\Department;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,9 @@ Route::apiResource('departments', DepartmentController::class)->middleware(['aut
 
 #Position
 Route::apiResource('positions', PositionController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
+
+#Job History
+Route::apiResource('job-histories', JobHistoryController::class)->middleware(['auth:sanctum', 'is_admin_or_hr']);
 
 
 // ROUTES MAINTAINED BY NAVEED

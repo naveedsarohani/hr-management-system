@@ -42,4 +42,10 @@ class Employee extends Model
     {
         return $this->hasMany(Position::class);
     }
+
+    public function jobHistories()
+    {
+        return $this->hasMany(JobHistory::class);
+    }
+
 }

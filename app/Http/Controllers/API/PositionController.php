@@ -30,34 +30,13 @@ class PositionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'employee_id' => 'required|exists:employees,id',
-    //         'job_position' => 'required|string'
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'message' => 'Validation failed.',
-    //             'status' => Status::INVALID_REQUEST,
-    //             'errors' => $validator->errors()
-    //         ], Status::INVALID_REQUEST);
-    //     }
-
-    //     $position = new Position();
-    //     $position->employee_id = $request->employee_id;
-    //     $position->job_position = $request->job_position;
-    //     $position->save();
-
-    //     return response()->json(['message' => 'Job Position Add Successfully'], Status::SUCCESS);
-    // }
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'employee_id' => 'required|exists:employees,id',
-            'job_position' => 'required|string',
+            'job_position' => 'required|string|alpha',
+        ], [
+            'job_position.alpha' => 'Job position must be string only',
         ]);
 
         if ($validator->fails()) {
@@ -90,7 +69,6 @@ class PositionController extends Controller
         return response()->json(['message' => 'Job Position Add Successfully'], Status::SUCCESS);
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -112,88 +90,59 @@ class PositionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, string $id)
-    // {
-    //     $position = Position::find($id);
+    public function update(Request $request, string $id)
+    {
+        $position = Position::find($id);
 
-    //     if (!$position) {
-    //         return response()->json([
-    //             'message' => 'Job Position Not Found',
-    //             'status' => Status::NOT_FOUND,
-    //             'errors' => ['position' => ['Job position not found.']]
-    //         ], Status::NOT_FOUND);
-    //     }
+        if (!$position) {
+            return response()->json([
+                'message' => 'Job Position Not Found',
+                'status' => Status::NOT_FOUND,
+                'errors' => ['position' => ['Job position not found.']]
+            ], Status::NOT_FOUND);
+        }
 
-    //     $validator = Validator::make($request->all(), [
-    //         'employee_id' => 'sometimes|exists:employees,id',
-    //         'job_position' => 'sometimes|string'
-    //     ]);
+        $validator = Validator::make($request->all(), [
+            'employee_id' => 'sometimes|exists:employees,id',
+            'job_position' => 'sometimes|string|alpha',
+        ], [
+            'job_position.alpha' => 'Job position must be string only',
+        ]);
 
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'message' => 'Validation failed.',
-    //             'status' => Status::INVALID_REQUEST,
-    //             'errors' => $validator->errors()
-    //         ], Status::INVALID_REQUEST);
-    //     }
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'status' => Status::INVALID_REQUEST,
+                'errors' => $validator->errors()
+            ], Status::INVALID_REQUEST);
+        }
 
-    //     $position->employee_id = $request->employee_id;
-    //     $position->job_position = $request->job_position;
-    //     $position->save();
+        $existingPosition = Position::where('employee_id', $request->employee_id)
+            ->where('job_position', $request->job_position)
+            ->where('id', '!=', $id)
+            ->first();
 
-    //     return response()->json(['message' => 'Job Position Updated Successfully'], Status::SUCCESS);
-    // }
+        if ($existingPosition) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'status' => Status::INVALID_REQUEST,
+                'errors' => [
+                    'job_position' => ['This position is already assigned to this employee.']
+                ]
+            ], Status::INVALID_REQUEST);
+        }
+
+        $position->employee_id = $request->employee_id;
+        $position->job_position = $request->job_position;
+        $position->save();
+
+        return response()->json(['message' => 'Job Position Updated Successfully'], Status::SUCCESS);
+    }
 
     /**
- * Update the specified resource in storage.
- */
-    public function update(Request $request, string $id)
-        {
-            $position = Position::find($id);
-
-            if (!$position) {
-                return response()->json([
-                    'message' => 'Job Position Not Found',
-                    'status' => Status::NOT_FOUND,
-                    'errors' => ['position' => ['Job position not found.']]
-                ], Status::NOT_FOUND);
-            }
-
-            $validator = Validator::make($request->all(), [
-                'employee_id' => 'sometimes|exists:employees,id',
-                'job_position' => 'sometimes|string',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'message' => 'Validation failed.',
-                    'status' => Status::INVALID_REQUEST,
-                    'errors' => $validator->errors()
-                ], Status::INVALID_REQUEST);
-            }
-
-            $existingPosition = Position::where('employee_id', $request->employee_id)
-                ->where('job_position', $request->job_position)
-                ->where('id', '!=', $id)
-                ->first();
-
-            if ($existingPosition) {
-                return response()->json([
-                    'message' => 'Validation failed.',
-                    'status' => Status::INVALID_REQUEST,
-                    'errors' => [
-                        'job_position' => ['This position is already assigned to this employee.']
-                    ]
-                ], Status::INVALID_REQUEST);
-            }
-
-            $position->employee_id = $request->employee_id;
-            $position->job_position = $request->job_position;
-            $position->save();
-
-            return response()->json(['message' => 'Job Position Updated Successfully'], Status::SUCCESS);
-        }
-        /**
+     * Remove the specified resource from storage.
+     */
+    /**
          * Remove the specified resource from storage.
          */
         public function destroy(string $id)
