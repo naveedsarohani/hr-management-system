@@ -22,7 +22,12 @@ class Job extends Model
         'skills_required',
         'status'
     ];
-    
+
+    protected $casts = [
+        'benefits' => 'array',
+        'skills_required' => 'array'
+    ];
+
     public function application()
     {
         return $this->hasOne(Application::class, 'job_id', 'id');

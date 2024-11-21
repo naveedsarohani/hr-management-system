@@ -34,7 +34,7 @@ class JobController extends Controller
             'experience' => 'required|min:2|max:255',
             'employment_type' => 'required|in:full-time,part-time,contract,internship',
             'job_location' => 'required|min:4|max:255',
-            'salary_range' => 'required|regex:/^[50-70]+k$/',
+            'salary_range' => ['required', 'regex:/^(5[0-9]|6[0-9]|70)k$/i'],
             'qualifications' => 'required|min:2|max:255',
             'benefits' => 'required|nullable',
             'skills_required' => 'required|nullable',
@@ -77,10 +77,10 @@ class JobController extends Controller
             'experience' => 'sometimes|required|min:2|max:255',
             'employment_type' => 'sometimes|required|in:full-time,part-time,contract,internship',
             'job_location' => 'sometimes|required|min:4|max:255',
-            'salary_range' => 'sometimes|required|regex:/^[50-70]+k$/',
+            'salary_range' => ['sometimes', 'required', 'regex:/^(5[0-9]|6[0-9]|70)k$/i'],
             'qualifications' => 'sometimes|required|min:2|max:255',
-            'benefits' => 'sometimes|required|nullable',
-            'skills_required' => 'sometimes|required|nullable',
+            'benefits' => 'sometimes|nullable',
+            'skills_required' => 'sometimes|nullable',
             'status' => 'sometimes|required|in:open,closed',
         ]);
 
