@@ -19,3 +19,15 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+Options -Indexes
+
+<Files ~ "\.(git|env|config.js|md|gitignore|gitattributes|lock|example)$">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ~ "(artisan)$">
+    Order allow,deny
+    Deny from all
+</Files>
