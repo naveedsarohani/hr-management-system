@@ -30,8 +30,24 @@ class ApplicationController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'job_id' => 'required',
-            'candidate_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:255',
+            'candidate_name' => [
+                'required',
+                'min:4',
+                'max:255',
+                'regex:/^[a-zA-Z]+[a-zA-Z\s]*$/'
+            ],
             'email' => 'required|email:rfc,dns|unique:applications,email',
+            'contact_number' => [
+                'required',
+                'regex:/^\+?[0-9]{10,12}$/'
+            ],
+            'cover_letter' => 'required|min:10',
+            'portfolio_link' => 'sometimes|nullable',
+            'expected_salary' => 'required|max:10',
+            'notice_period' => [
+                'required',
+                'regex:/^(1 week|15 days|1 month)$/'
+            ],
             'status' => 'required|in:pending,interview,hired,rejected',
             'resume' => 'required|mimes:pdf|max:3072',
         ]);
@@ -79,9 +95,29 @@ class ApplicationController extends Controller
     public function update(Request $request, string $applicationId)
     {
         $validation = Validator::make($request->all(), [
-            'candiate_name' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
-            'email' => 'sometimes|required|email:rfc,dns|unique:applications,email',
-            'resume' => 'sometimes|required|mimes:pdf',
+            'candidate_name' => [
+                'sometimes',
+                'required',
+                'min:4',
+                'max:255',
+                'regex:/^[a-zA-Z]+[a-zA-Z\s]*$/'
+            ],
+            'email' => 'sometimes|required|email:rfc,dns|unique:applications,email,' . $applicationId . ',id',
+            'contact_number' => [
+                'sometimes',
+                'required',
+                'regex:/^\+?[0-9]{10,12}$/'
+            ],
+            'cover_letter' => 'sometimes|required|min:10',
+            'portfolio_link' => 'sometimes|nullable',
+            'expected_salary' => 'sometimes|required|max:10',
+            'notice_period' => [
+                'sometimes',
+                'required',
+                'regex:/^(1 week|15 days|1 month)$/'
+            ],
+            'status' => 'sometimes|required|in:pending,interview,hired,rejected',
+            'resume' => 'sometimes|required|mimes:pdf|max:3072',
         ]);
 
         if ($validation->fails()) {

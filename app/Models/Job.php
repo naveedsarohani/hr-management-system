@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,7 +22,7 @@ class Job extends Model
         'skills_required',
         'status'
     ];
-
+    
     public function application()
     {
         return $this->hasOne(Application::class, 'job_id', 'id');

@@ -15,13 +15,13 @@ class Employee extends Model
         'email',
         'phone',
         'address',
-        'department',
-        'position',
         'date_of_joining',
         'office_in_timing',
         'office_out_timing',
-        'status'
+        'status',
     ];
+
+    public $timestamps = false;
 
     public function User()
     {

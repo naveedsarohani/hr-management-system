@@ -9,11 +9,18 @@ class Application extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'candidate_name',
         'email',
-        'status',
+        'contact_number',
+        'cover_letter',
+        'portfolio_link',
+        'expected_salary',
+        'notice_period',
         'resume',
+        'status',
     ];
 
     public function job()

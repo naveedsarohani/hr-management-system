@@ -25,17 +25,14 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'first_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
+            'first_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:3|max:100',
             'last_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:2|max:100',
             'email' => 'required|email:rfc,dns|unique:employees,email',
-            'phone' => 'sometimes|required|numeric|regex:/\+?[0-9]{10,11}$/',
+            'phone' => 'sometimes|required|numeric|regex:/\+?[0-9]{10,12}$/',
             'address' => 'required|min:10|max:255',
-            'department' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
-            'position' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'date_of_joining' => 'required|date',
             'office_in_timing' => 'required|flexible_time',
             'office_out_timing' => 'required|flexible_time',
-            'status' => 'required|in:terminate,active',
         ]);
 
         if ($validation->fails()) {
@@ -74,13 +71,11 @@ class EmployeeController extends Controller
     public function update(Request $request, string $employeeId)
     {
         $validation = Validator::make($request->all(), [
-            'first_name' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:4|max:100',
+            'first_name' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:3|max:100',
             'last_name' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:2|max:100',
             'email' => 'sometimes|required|email:rfc,dns|unique:employees,email,' . $employeeId . ',id',
-            'phone' => 'sometimes|required|numeric|regex:/\+?[0-9]{10,11}$/',
+            'phone' => 'sometimes|required|numeric|regex:/\+?[0-9]{10,12}$/',
             'address' => 'sometimes|required|min:10|max:255',
-            'department' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
-            'position' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/',
             'date_of_joining' => 'sometimes|required|date',
             'office_in_timing' => 'sometimes|required|flexible_time',
             'office_out_timing' => 'sometimes|required|flexible_time',
