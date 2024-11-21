@@ -33,7 +33,9 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string',
+            'title' => 'required|string|unique:departments,title',
+        ], [
+            'title.unique' => 'Department already exists',
         ]);
 
         if ($validator->fails()) {
@@ -85,7 +87,9 @@ class DepartmentController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'title' => 'sometimes|string',
+            'title' => 'sometimes|string|unique:departments,title,'.$id,
+        ], [
+            'title.unique' => 'Department already exists',
         ]);
 
         if ($validator->fails()) {
