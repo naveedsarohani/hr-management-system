@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Auth\Events\Validated;
 
 class AuthController extends Controller
 {
@@ -169,6 +170,28 @@ class AuthController extends Controller
 
         $user->delete();
         return response()->json(['message' => 'HR deleted successfully'], Status::SUCCESS);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|confirmed|min:8',
+            'new_password_confirmation' => 'required|same:new_password'
+        ]);
+
+        $user = auth()->user();
+
+        if(!hash::check($request->current_password, $user->password))
+        {
+            return response()->json(['error' => 'Current password does nopt match'], Status::INVALID_REQUEST);
+        }
+
+       $user->password = Hash::make($request->new_password);
+       $user->save();
+
+       return response()->json(['message' => 'Password updated successfully'], Status::SUCCESS);
+
     }
 
     public function logout(Request $request)
