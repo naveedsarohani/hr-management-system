@@ -34,9 +34,13 @@ class PositionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'employee_id' => 'required|exists:employees,id',
-            'job_position' => 'required|string|alpha',
+            'job_position' => [
+                'required',
+                'string',
+                'regex:/^[a-zA-Z\s]+$/'
+            ],
         ], [
-            'job_position.alpha' => 'Job position must be string only',
+            'job_position.regex' => 'Job position must only contain letters',
         ]);
 
         if ($validator->fails()) {
@@ -104,9 +108,13 @@ class PositionController extends Controller
 
         $validator = Validator::make($request->all(), [
             'employee_id' => 'sometimes|exists:employees,id',
-            'job_position' => 'sometimes|string|alpha',
+            'job_position' => [
+                'sometimes',
+                'string',
+                'regex:/^[a-zA-Z\s]+$/'
+            ],
         ], [
-            'job_position.alpha' => 'Job position must be string only',
+            'job_position.regex' => 'Job position must only contain letters',
         ]);
 
         if ($validator->fails()) {

@@ -33,10 +33,15 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|alpha|unique:departments,title',
+            'title' => [
+                'required',
+                'string',
+                'regex:/^[a-zA-Z\s]+$/',
+                'unique:departments,title'
+            ],
         ], [
+            'title.regex' => 'Department title must only contain letters and spaces',
             'title.unique' => 'Department already exists',
-            'title.alpha' => 'Department title must be string only',
         ]);
 
         if ($validator->fails()) {
@@ -88,10 +93,15 @@ class DepartmentController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'title' => 'sometimes|string|alpha|unique:departments,title,'.$id,
+            'title' => [
+                'sometimes',
+                'string',
+                'regex:/^[a-zA-Z\s]+$/',
+                'unique:departments,title,'.$id
+            ],
         ], [
+            'title.regex' => 'Department title must only contain letters and spaces',
             'title.unique' => 'Department already exists',
-            'title.alpha' => 'Department title must be string only',
         ]);
 
         if ($validator->fails()) {
