@@ -57,6 +57,7 @@ class JobHistoryController extends Controller
         $job_history->department_id = $request->department_id;
         $job_history->employment_from = $request->employment_from;
         $job_history->employment_to = $request->employment_to;
+        $job_history->status = $request->status;
         $job_history->save();
 
         return response()->json(['message' => 'Job History Add Successfully'], Status::SUCCESS);

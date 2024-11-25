@@ -20,7 +20,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::controller(AuthController::class)->group(function () {
         Route::post('/login', 'login');
         Route::post('/hr-self-register', 'register');
-        Route::get('/logout', 'logout')->middleware('auth:sanctum');;
+        Route::get('/logout', 'logout')->middleware('auth:sanctum');
+        Route::post('/update-password', 'updatePassword')->middleware('auth:sanctum');
     });
 });
 
