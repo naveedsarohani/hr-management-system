@@ -53,7 +53,7 @@ class AttendanceController extends Controller
         $employee = Employee::find($request->employee_id);
 
         if ($request->status != 'absent' && $request->status != 'on leave') {
-            $formattedTime = DateTime::createFromFormat('h:i A', $request->time)->format('H:i');
+            $formattedTime = DateTime::createFromFormat('h:i A', $request->time)->format('h:i A');
             $request->merge(['time' => $formattedTime]);
         } else {
             $request->merge(['time' => null]);
@@ -132,7 +132,7 @@ class AttendanceController extends Controller
         ]);
 
         if ($request->has('status') && $request->status != 'absent' && $request->status != 'on leave') {
-            $formattedTime = DateTime::createFromFormat('h:i A', $request->time)->format('H:i');
+            $formattedTime = DateTime::createFromFormat('h:i A', $request->time)->format('h:i A');
             $request->merge(['time' => $formattedTime]);
         } elseif ($request->has('status') && in_array($request->status, ['absent', 'on leave'])) {
             $request->merge(['time' => null]);
