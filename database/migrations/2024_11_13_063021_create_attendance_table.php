@@ -15,11 +15,15 @@ return new class extends Migration
     {
         Schema::create('attendance', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('employee_id');
             $table->date('date');
-            $table->time('time');
-            $table->enum('status',['present', 'absent', 'on leave']);
+            $table->time('time_in')->nullable();
+            $table->time('time_out')->nullable();
+            $table->string('location')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamps();
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });
     }
 

@@ -36,50 +36,61 @@ class AttendanceController extends Controller
     {
         $yesterday = date('Y-m-d', strtotime('-1 day'));
         $today = date('Y-m-d');
-        $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
-            'date' => 'required|date|after_or_equal:'.$yesterday.'|before_or_equal:'.$today,
-            'status' => [
+            'date' => 'required|date|after_or_equal:' . $yesterday . '|before_or_equal:' . $today,
+            'time_in' => [
                 'required',
-                'regex:/^(present|absent|on leave)$/i'
+                'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/',
             ],
-            'time' => [
-                'required_if:status,present',
-                'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/'
-            ]
+            'time_out' => [
+                'nullable',
+                'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/',
+            ],
+            'location' => 'nullable|string|max:255',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
-        $employee = Employee::find($request->employee_id);
 
-        if ($request->status != 'absent' && $request->status != 'on leave') {
-            $formattedTime = DateTime::createFromFormat('h:i A', $request->time)->format('h:i A');
-            $request->merge(['time' => $formattedTime]);
-        } else {
-            $request->merge(['time' => null]);
-        }
+        // Format the time_in and time_out
+        $timeIn = DateTime::createFromFormat('h:i A', $request->time_in)->format('h:i A');
+        $timeOut = $request->time_out
+            ? DateTime::createFromFormat('h:i A', $request->time_out)->format('h:i A')
+            : null;
 
+        $request->merge([
+            'time_in' => $timeIn,
+            'time_out' => $timeOut,
+        ]);
+
+        // Check for existing attendance record
         $existingAttendance = Attendance::where('employee_id', $request->employee_id)
             ->where('date', $request->date)
             ->exists();
 
         if ($existingAttendance) {
-                return response()->json([
-                    'message' => 'Attendance already exists for today.',
-                    'status' => Status::INVALID_REQUEST,
-                    'errors' => ['attendance' => ['Attendance already exists for today.']]
-                ], Status::INVALID_REQUEST);
+            return response()->json([
+                'message' => 'Attendance already exists for this date.',
+                'status' => Status::INVALID_REQUEST,
+                'errors' => ['attendance' => ['Attendance already exists for this date.']],
+            ], Status::INVALID_REQUEST);
         }
 
         $attendance = Attendance::create([
             'employee_id' => $request->employee_id,
             'date' => $request->date,
-            'time' => $request->time,
-            'status' => $request->status
+            'time_in' => $request->time_in,
+            'time_out' => $request->time_out,
+            'location' => $request->location,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
         ]);
 
         return response()->json(['message' => 'Attendance added successfully'], Status::SUCCESS);
     }
+
+
 
     /**
      * Display the specified resource.
@@ -100,88 +111,4 @@ class AttendanceController extends Controller
         return response()->json(['attendance' => $attendance], Status::SUCCESS);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $attendance = Attendance::find($id);
-
-        if (!$attendance) {
-            return response()->json([
-                'message' => 'Attendance Not Found.',
-                'status' => Status::NOT_FOUND,
-                'errors' => ['attendance' => ['Attendance not found.']]
-            ], Status::NOT_FOUND);
-        }
-
-        $today = date('Y-m-d');
-
-        $request->validate([
-            'employee_id' => 'nullable|exists:employees,id',
-            'date' => 'nullable|date|before_or_equal:'.$today,
-            'status' => [
-                'nullable',
-                'regex:/^(present|absent|on leave)$/i'
-            ],
-            'time' => [
-                'nullable',
-                'regex:/^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$/',
-                'required_if:status,present',
-            ],
-        ]);
-
-        if ($request->has('status') && $request->status != 'absent' && $request->status != 'on leave') {
-            $formattedTime = DateTime::createFromFormat('h:i A', $request->time)->format('h:i A');
-            $request->merge(['time' => $formattedTime]);
-        } elseif ($request->has('status') && in_array($request->status, ['absent', 'on leave'])) {
-            $request->merge(['time' => null]);
-        }
-
-        if ($request->date > $today && $attendance->date != $request->date) {
-            return response()->json(['message' => 'Cannot update attendance for future dates.'], Status::INVALID_REQUEST);
-        }
-
-        $existingAttendance = Attendance::where('employee_id', $request->employee_id)
-                                    ->where('date', $request->date)
-                                    ->where('id', '!=', $id)
-                                    ->exists();
-
-      if ($existingAttendance) {
-            return response()->json([
-                'message' => 'Attendance already exists for today.',
-                'status' => Status::INVALID_REQUEST,
-                'errors' => [
-                    'attendance' => ['Attendance already exists for today.']
-                ]
-            ], Status::INVALID_REQUEST);
-        }
-
-        $attendance->update([
-            'employee_id' => $request->employee_id,
-            'date' => $request->date,
-            'time' => $request->time,
-            'status' => $request->status,
-        ]);
-
-        return response()->json(['message' => 'Attendance updated successfully'], Status::SUCCESS);
-    }
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $attendance = Attendance::find($id);
-
-        if (!$attendance) {
-            return response()->json([
-                'message' => 'Attendance Not Found',
-                'status' => Status::NOT_FOUND,
-                'errors' => ['attendance' => ['Attendance not found.']]
-            ], Status::NOT_FOUND);
-        }
-
-        $attendance->delete();
-        return response()->json(['message' => 'Attendance Delete Successfully'], Status::SUCCESS);
-    }
 }
