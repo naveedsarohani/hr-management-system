@@ -47,5 +47,8 @@ class Employee extends Model
     {
         return $this->hasMany(JobHistory::class);
     }
-
+    public function leave()
+    {
+        return $this->hasOne(Leave::class, 'employee_id', 'id');
+    }
 }
