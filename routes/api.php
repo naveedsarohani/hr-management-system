@@ -9,6 +9,7 @@ use App\Http\Controllers\ApI\PerformanceReviewController;
 use App\Http\Controllers\API\CompensationController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\API\JobHistoryController;
+use App\Http\Controllers\API\LeaveController;
 use App\Http\Controllers\Api\PositionController;
 use App\Models\Department;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,7 @@ Route::apiResource('job-histories', JobHistoryController::class)->middleware(['a
 // ROUTES MAINTAINED BY NAVEED
 # employees
 Route::apiResource('employees', EmployeeController::class)->middleware('auth:sanctum');
+Route::apiResource('leaves', LeaveController::class)->middleware('auth:sanctum');
 
 # jobs
 Route::controller(JobController::class)->prefix('jobs')->group(function () {

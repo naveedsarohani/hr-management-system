@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('applications', function (Blueprint $table) {
@@ -18,15 +15,17 @@ return new class extends Migration
             $table->string('candidate_name', 255);
             $table->string('email');
             $table->unique(['job_id', 'email']);
+            $table->string('contact_number', 13);
+            $table->text('cover_letter');
+            $table->string('portfolio_link')->nullable();
+            $table->string('expected_salary', 10);
+            $table->enum('notice_period', ['1 week', '15 days', '1 month']);
             $table->enum('status', ['pending', 'interview', 'hired', 'rejected']);
             $table->string('resume');
-            $table->timestamps();
+            $table->timestamp('applied_at')->default(now());
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('applications');

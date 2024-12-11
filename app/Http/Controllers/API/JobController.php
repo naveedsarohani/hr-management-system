@@ -31,11 +31,11 @@ class JobController extends Controller
         $validation = Validator::make($data = $request->all(), [
             'title' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:10|max:255',
             'description' => 'required|min:10',
-            'experience' => 'required|min:10|max:255',
+            'experience' => 'required|min:2|max:255',
             'employment_type' => 'required|in:full-time,part-time,contract,internship',
-            'job_location' => 'required|min:10|max:255',
-            'salary_range' => 'required|regex:/^[50-70]+k$/',
-            'qualifications' => 'required|min:10|max:255',
+            'job_location' => 'required|min:4|max:255',
+            'salary_range' => ['required', 'regex:/^(5[0-9]|6[0-9]|70)k$/i'],
+            'qualifications' => 'required|min:2|max:255',
             'benefits' => 'required|nullable',
             'skills_required' => 'required|nullable',
             'status' => 'required|in:open,closed',
@@ -71,18 +71,18 @@ class JobController extends Controller
 
     public function update(Request $request, string $jobId)
     {
-        $validation = Validator::make($request->all(), [
+        $validation = Validator::make($data = $request->all(), [
             'title' => 'sometimes|required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:10|max:255',
             'description' => 'sometimes|required|min:10',
-            'experience' => 'sometimes|required|min:10|max:255',
+            'experience' => 'sometimes|required|min:2|max:255',
             'employment_type' => 'sometimes|required|in:full-time,part-time,contract,internship',
-            'job_location' => 'sometimes|required|min:10|max:255',
-            'salary_range' => 'sometimes|required|regex:/^[50-70]+k$/',
-            'qualifications' => 'sometimes|required|min:10|max:255',
-            'benefits' => 'sometimes|required|nullable',
-            'skills_required' => 'sometimes|required|nullable',
+            'job_location' => 'sometimes|required|min:4|max:255',
+            'salary_range' => ['sometimes', 'required', 'regex:/^(5[0-9]|6[0-9]|70)k$/i'],
+            'qualifications' => 'sometimes|required|min:2|max:255',
+            'benefits' => 'sometimes|nullable',
+            'skills_required' => 'sometimes|nullable',
             'status' => 'sometimes|required|in:open,closed',
-        ]);;
+        ]);
 
         if ($validation->fails()) {
             return $this->errorResponse(Status::INVALID_REQUEST, 'there was validation failure', $validation->errors()->toArray());

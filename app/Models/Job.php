@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,6 +21,11 @@ class Job extends Model
         'benefits',
         'skills_required',
         'status'
+    ];
+
+    protected $casts = [
+        'benefits' => 'array',
+        'skills_required' => 'array'
     ];
 
     public function application()

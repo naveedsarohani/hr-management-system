@@ -15,13 +15,13 @@ class Employee extends Model
         'email',
         'phone',
         'address',
-        'department',
-        'position',
         'date_of_joining',
         'office_in_timing',
         'office_out_timing',
-        'status'
+        'status',
     ];
+
+    public $timestamps = false;
 
     public function User()
     {
@@ -47,6 +47,7 @@ class Employee extends Model
     {
         return $this->hasMany(JobHistory::class);
     }
+
     public function complaints()
     {
         return $this->hasMany(Complaint::class, 'employee_id');
@@ -55,6 +56,11 @@ class Employee extends Model
     public function resolvedComplaints()
     {
         return $this->hasMany(Complaint::class, 'hr_resolved_by');
+    }
+
+    public function leave()
+    {
+        return $this->hasOne(Leave::class, 'employee_id', 'id');
     }
 
 }

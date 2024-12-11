@@ -18,13 +18,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('address', 255);
-            $table->string('department', 255);
-            $table->string('position', 255);
             $table->string('office_in_timing', 10);
             $table->string('office_out_timing', 10);
             $table->enum('status', ['terminate', 'active'])->default('active');
             $table->date('date_of_joining');
-            $table->timestamps();
         });
     }
 
