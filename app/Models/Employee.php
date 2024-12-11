@@ -47,8 +47,20 @@ class Employee extends Model
     {
         return $this->hasMany(JobHistory::class);
     }
+
+    public function complaints()
+    {
+        return $this->hasMany(Complaint::class, 'employee_id');
+    }
+
+    public function resolvedComplaints()
+    {
+        return $this->hasMany(Complaint::class, 'hr_resolved_by');
+    }
+
     public function leave()
     {
         return $this->hasOne(Leave::class, 'employee_id', 'id');
     }
+
 }
