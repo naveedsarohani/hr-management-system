@@ -12,6 +12,10 @@ class Department extends Model
     public $table = 'departments';
     protected $fillable = ['title'];
 
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id', 'id');
+    }
     public function jobHistories()
     {
         return $this->hasMany(JobHistory::class);
