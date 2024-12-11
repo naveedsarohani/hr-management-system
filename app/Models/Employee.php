@@ -42,11 +42,6 @@ class Employee extends Model
     {
         return $this->hasMany(Position::class);
     }
-    
-    public function department()
-    {
-        return $this->hasMany(Department::class);
-    }
 
     public function jobHistories()
     {

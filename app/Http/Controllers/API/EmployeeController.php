@@ -15,7 +15,7 @@ class EmployeeController extends Controller
     public function index()
     {
         try {
-            $employees = Employee::with(['user', 'position', 'department'])->get();
+            $employees = Employee::with(['user', 'position'])->get();
             return $this->successResponse(Status::SUCCESS, 'all employees records', compact('employees'));
         } catch (Exception $e) {
             return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
