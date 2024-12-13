@@ -33,6 +33,8 @@ class CompensationController extends Controller
             'employee_id' => 'required|exists:employees,id',
             'base_salary' => 'required|numeric',
             'bonus' => 'required|numeric',
+            'payment_date' => 'date',
+            'payment_month' => 'integer|between:1,12',
         ]);
 
         $compensation = new Compensation();
@@ -40,6 +42,9 @@ class CompensationController extends Controller
         $compensation->base_salary = $request->base_salary;
         $compensation->bonus = $request->bonus;
         $compensation->total_compensation = $request->base_salary + $request->bonus;
+        $compensation->payment_date = $request->payment_date;
+        $compensation->payment_month = $request->payment_month;
+
         $compensation->save();
 
         return response()->json(['message' => 'Compensation Add Successfully', Status::SUCCESS]);
@@ -74,11 +79,16 @@ class CompensationController extends Controller
         $request->validate([
             'base_salary' => 'numeric',
             'bonus' => 'numeric',
+            'payment_month' => 'nullable|integer|between:1,12',
+            'payment_year' => 'nullable|integer|min:2020',
         ]);
 
         $compensation->base_salary = $request->base_salary;
         $compensation->bonus = $request->bonus;
         $compensation->total_compensation = $request->base_salary + $request->bonus;
+        $compensation->payment_date = $request->payment_date;
+        $compensation->payment_month = $request->payment_month;
+
         $compensation->save();
 
         return response()->json(['message' => 'Compensation Update Successfully'], Status::SUCCESS);

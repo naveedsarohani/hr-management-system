@@ -14,8 +14,8 @@ class PositionController extends Controller
      */
     public function index()
     {
-        $positions = Position::with('employee')->get();
 
+        $positions = Position::with('employee')->get();
         if ($positions->isEmpty()) {
             return response()->json([
                 'message' => 'No Records Found',
@@ -43,7 +43,7 @@ class PositionController extends Controller
             'job_position.regex' => 'Job position must only contain letters',
         ]);
 
-        if ($validator->fails()) {
+        if ($validator->fails()) {$positions = Position::with('employee')->count('job_position')->get();
             return response()->json([
                 'message' => 'Validation failed.',
                 'status' => Status::INVALID_REQUEST,

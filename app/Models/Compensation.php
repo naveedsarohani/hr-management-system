@@ -15,7 +15,9 @@ class Compensation extends Model
         'employee_id',
         'base_salary',
         'bonus',
-        'total_compensation'
+        'total_compensation',
+        'payment_date',
+        'payment_month'
     ];
 
     public function employee()
