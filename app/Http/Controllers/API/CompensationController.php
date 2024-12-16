@@ -16,8 +16,7 @@ class CompensationController extends Controller
     {
         $compensations = Compensation::with('employee')->get();
 
-        if($compensations->isEmpty())
-        {
+        if ($compensations->isEmpty()) {
             return response()->json(['message' => 'No Records Found'], Status::NOT_FOUND);
         }
 
@@ -34,7 +33,7 @@ class CompensationController extends Controller
             'base_salary' => 'required|numeric',
             'bonus' => 'required|numeric',
             'payment_date' => 'date',
-            'payment_month' => 'integer|between:1,12',
+            'payment_month' => ['required', 'regex:/20[0-9]{2}-(0[1-9]|1[0-2])/']
         ]);
 
         $compensation = new Compensation();
@@ -57,8 +56,7 @@ class CompensationController extends Controller
     {
         $compensation = Compensation::find($id);
 
-        if(!$compensation)
-        {
+        if (!$compensation) {
             return response()->json(['message' => 'Compensation Not Found'], Status::NOT_FOUND);
         }
 
@@ -79,8 +77,8 @@ class CompensationController extends Controller
         $request->validate([
             'base_salary' => 'numeric',
             'bonus' => 'numeric',
-            'payment_month' => 'nullable|integer|between:1,12',
-            'payment_year' => 'nullable|integer|min:2020',
+            'payment_date' => 'date',
+            'payment_month' => ['required', 'regex:/20[0-9]{2}-(0[1-9]|1[0-2])/']
         ]);
 
         $compensation->base_salary = $request->base_salary;
@@ -95,7 +93,7 @@ class CompensationController extends Controller
     }
     /**
      * Remove the specified resource from storage.
-    */
+     */
     public function destroy(string $id)
     {
         $compensation = Compensation::find($id);

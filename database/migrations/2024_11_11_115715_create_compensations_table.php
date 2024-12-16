@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('bonus', 10, 2);
             $table->decimal('total_compensation', 10, 2);
             $table->date('payment_date');
-            $table->integer('payment_month');
+            $table->string('payment_month');
             $table->timestamps();
         });
     }
