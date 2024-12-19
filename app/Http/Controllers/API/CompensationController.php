@@ -16,8 +16,7 @@ class CompensationController extends Controller
     {
         $compensations = Compensation::with('employee')->get();
 
-        if($compensations->isEmpty())
-        {
+        if ($compensations->isEmpty()) {
             return response()->json(['message' => 'No Records Found'], Status::NOT_FOUND);
         }
 
@@ -33,6 +32,8 @@ class CompensationController extends Controller
             'employee_id' => 'required|exists:employees,id',
             'base_salary' => 'required|numeric',
             'bonus' => 'required|numeric',
+            'payment_date' => 'date',
+            'payment_month' => ['required', 'regex:/20[0-9]{2}-(0[1-9]|1[0-2])/']
         ]);
 
         $compensation = new Compensation();
@@ -40,6 +41,9 @@ class CompensationController extends Controller
         $compensation->base_salary = $request->base_salary;
         $compensation->bonus = $request->bonus;
         $compensation->total_compensation = $request->base_salary + $request->bonus;
+        $compensation->payment_date = $request->payment_date;
+        $compensation->payment_month = $request->payment_month;
+
         $compensation->save();
 
         return response()->json(['message' => 'Compensation Add Successfully', Status::SUCCESS]);
@@ -52,8 +56,7 @@ class CompensationController extends Controller
     {
         $compensation = Compensation::find($id);
 
-        if(!$compensation)
-        {
+        if (!$compensation) {
             return response()->json(['message' => 'Compensation Not Found'], Status::NOT_FOUND);
         }
 
@@ -74,18 +77,23 @@ class CompensationController extends Controller
         $request->validate([
             'base_salary' => 'numeric',
             'bonus' => 'numeric',
+            'payment_date' => 'date',
+            'payment_month' => ['required', 'regex:/20[0-9]{2}-(0[1-9]|1[0-2])/']
         ]);
 
         $compensation->base_salary = $request->base_salary;
         $compensation->bonus = $request->bonus;
         $compensation->total_compensation = $request->base_salary + $request->bonus;
+        $compensation->payment_date = $request->payment_date;
+        $compensation->payment_month = $request->payment_month;
+
         $compensation->save();
 
         return response()->json(['message' => 'Compensation Update Successfully'], Status::SUCCESS);
     }
     /**
      * Remove the specified resource from storage.
-    */
+     */
     public function destroy(string $id)
     {
         $compensation = Compensation::find($id);
