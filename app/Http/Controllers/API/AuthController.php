@@ -84,7 +84,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials or account not approved'], Status::UNAUTHORIZED);
         }
 
-        if (!in_array($user->role, ['admin', 'hr'])) {
+        if (!in_array($user->role, ['admin', 'hr', 'employee'])) {
             return response()->json(['message' => 'Access denied. Only HR and Admin can login.'], Status::FORBIDDEN);
         }
 

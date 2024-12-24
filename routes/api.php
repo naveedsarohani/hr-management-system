@@ -13,6 +13,8 @@ use App\Http\Controllers\API\LeaveController;
 use App\Http\Controllers\Api\PositionController;
 use App\Models\Department;
 use Illuminate\Support\Facades\Route;
+use App\Mail\EmployeeRegistrationEmail;
+use Illuminate\Support\Facades\Mail;
 
 /*Routes Maintained BY Wajid Laghari*/
 
@@ -80,3 +82,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('applications', ApplicationController::class)->except('store');
 });
 Route::post('applications/', [ApplicationController::class, 'store']);
+
+# Test Email Route
+Route::get('/test-email', function () {
+    $employee = App\Models\Employee::first(); // Replace with the actual employee instance
+    Mail::to('recipient_email@example.com')->send(new EmployeeRegistrationEmail('password', $employee));
+
+    return 'Email sent!';
+});
