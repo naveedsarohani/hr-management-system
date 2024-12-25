@@ -19,6 +19,7 @@ class Employee extends Model
         'office_in_timing',
         'office_out_timing',
         'status',
+        'password'
     ];
 
     public $timestamps = false;

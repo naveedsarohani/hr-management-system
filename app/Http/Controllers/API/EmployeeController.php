@@ -9,6 +9,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmployeeRegistrationEmail;
 
 class EmployeeController extends Controller
 {
@@ -27,7 +31,7 @@ class EmployeeController extends Controller
         $validation = Validator::make($request->all(), [
             'first_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:3|max:100',
             'last_name' => 'required|regex:/^[a-zA-Z]+[a-zA-Z\s]*/|min:2|max:100',
-            'email' => 'required|email:rfc,dns|unique:employees,email',
+            'email' => 'required|email:rfc,dns|unique:employees,email|unique:users,email',
             'phone' => 'sometimes|required|numeric|regex:/\+?[0-9]{10,12}$/',
             'address' => 'required|min:10|max:255',
             'date_of_joining' => 'required|date',
@@ -44,11 +48,30 @@ class EmployeeController extends Controller
                 throw new Exception('there is an internal error');
             }
 
-            if (!$user->employee()->create($request->all())) {
+            $password = Str::random(10);
+            $hashedPassword = Hash::make($password);
+
+            $employee = $user->employee()->create(array_merge($request->all(), [
+                'password' => $hashedPassword,
+                'role' => 'employee',
+            ]));
+
+
+            if (!$employee) {
                 throw new Exception('failed to create new employee resource');
             }
 
-            return $this->successResponse(Status::SUCCESS, 'a new employe resource was created');
+            $newUser = User::create([
+                'name' => $request->input('first_name'),
+                'email' => $request->input('email'),
+                'password' => $hashedPassword,
+                'role' => 'employee',
+                'status' => 'approved'
+            ]);
+
+            Mail::to($employee->email)->send(new EmployeeRegistrationEmail($password, $employee));
+
+            return $this->successResponse(Status::SUCCESS, 'a new employee resource was created');
         } catch (Exception $e) {
             return $this->errorResponse(Status::INTERNAL_SERVER_ERROR, $e->getMessage());
         }
