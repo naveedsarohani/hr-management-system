@@ -48,28 +48,19 @@ class EmployeeController extends Controller
                 throw new Exception('there is an internal error');
             }
 
-            $password = Str::random(10);
-            $hashedPassword = Hash::make($password);
-
-            $employee = $user->employee()->create(array_merge($request->all(), [
-                'password' => $hashedPassword,
-                'role' => 'employee',
-            ]));
-
-
-            if (!$employee) {
+            if (!$employee = $user->employee()->create($request->all())) {
                 throw new Exception('failed to create new employee resource');
             }
 
-            $newUser = User::create([
-                'name' => $request->input('first_name'),
+            User::create([
+                'name' => $request->input('first_name') . " " . $request->input('last_name'),
                 'email' => $request->input('email'),
-                'password' => $hashedPassword,
+                'password' => Hash::make($password = Str::random(10)),
                 'role' => 'employee',
                 'status' => 'approved'
             ]);
 
-            Mail::to($employee->email)->send(new EmployeeRegistrationEmail($password, $employee));
+            Mail::to($employee->email)->send(new EmployeeRegistrationEmail($password, $employee->email));
 
             return $this->successResponse(Status::SUCCESS, 'a new employee resource was created');
         } catch (Exception $e) {
