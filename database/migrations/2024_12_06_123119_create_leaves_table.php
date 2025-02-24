@@ -15,7 +15,7 @@ return new class extends Migration
             $table->date('leave_date');
             $table->text('leave_reason');
             $table->enum('leave_status', ['pending', 'accepted', 'rejected'])->default('pending');
-            $table->foreignId('leave_approved_by')->references('id')->on('employees')
+            $table->foreignId('leave_approved_by')->references('id')->on('employees')->default(null)
                 ->onDelete('cascade')->onUpdate('cascade');
         });
     }

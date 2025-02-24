@@ -13,17 +13,17 @@ class EmployeeRegistrationEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $password;
-    public $employee;
+    public $email;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($password, $employee)
+    public function __construct($password, $email)
     {
         $this->password = $password;
-        $this->employee = $employee;
+        $this->email = $email;
     }
 
     /**
@@ -39,7 +39,7 @@ class EmployeeRegistrationEmail extends Mailable
                             <h1>Employee Registration</h1>
                             <p>Your account has been created successfully.</p>
                             <p>Your login credentials are:</p>
-                            <p>Email: ' . $this->employee->email . '</p>
+                            <p>Email: ' . $this->email . '</p>
                             <p>Password: ' . $this->password . '</p>
                             <p>Please login to the system using these credentials.</p>
                         ');

@@ -28,7 +28,6 @@ class LeaveController extends Controller
             'employee_id' => 'required',
             'leave_date' => 'required|date',
             'leave_reason' => ['required', 'regex:/^[a-zA-z][a-zA-Z0-9_@%!()\s\.\\-]{5,}/'],
-            'leave_approved_by' => 'required',
         ]);
 
         if ($validation->fails()) {
@@ -39,10 +38,6 @@ class LeaveController extends Controller
             if (!$employee = Employee::find($request->employee_id)) {
                 return $this->errorResponse(Status::NOT_FOUND, 'the provided employee ID was invalid');
             }
-            if (!Employee::find($request->leave_approved_by)) {
-                return $this->errorResponse(Status::NOT_FOUND, 'the provided team lead ID was invalid');
-            }
-
             if (!$employee->leave()->create($request->except('employee_id'))) {
                 throw new Exception("failed to request office leave for {$employee->first_name} {$employee->last_name}");
             }
@@ -71,7 +66,7 @@ class LeaveController extends Controller
         $validation = Validator::make($request->all(), [
             'leave_date' => 'sometimes|required|date',
             'leave_reason' => ['sometimes', 'required', 'regex:/^[a-zA-z][a-zA-Z0-9_@%!()\s\.\\-]{5,}/'],
-            'leave_status' => 'sometimes|required|in:pending,accepted,rejected',
+            'leave_status' => 'sometimes|nullable|in:pending,accepted,rejected',
         ]);
 
         if ($validation->fails()) {
